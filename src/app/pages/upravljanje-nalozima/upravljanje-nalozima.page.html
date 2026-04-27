@@ -14,26 +14,39 @@
 
 <ion-content [fullscreen]="true">
   <ion-list lines="full">
-    <ion-item *ngFor="let user of users">
-      <ion-label>
-        <h2 style="font-weight: bold;">{{ user.firstName }} {{ user.lastName }}</h2>
-        <p>Korisničko ime: <strong>{{ user.username }}</strong></p>
-        <p>Pasoš: {{ user.passportNumber }} | LK: {{ user.idCardNumber }}</p>
-      </ion-label>
+    <ion-item-sliding *ngFor="let user of users">
       
-      <ion-badge slot="end" [color]="user.role === 'admin' ? 'danger' : 'primary'">
-        {{ user.role }}
-      </ion-badge>
-    </ion-item>
+      <ion-item>
+        <ion-label>
+          <h2 style="font-weight: bold;">{{ user.firstName }} {{ user.lastName }}</h2>
+          <p>Korisničko ime: <strong>{{ user.username }}</strong></p>
+          <p>Pasoš: {{ user.passportNumber }} | LK: {{ user.idCardNumber }}</p>
+        </ion-label>
+        
+        <ion-badge slot="end" [color]="user.role === 'admin' ? 'danger' : 'primary'">
+          {{ user.role }}
+        </ion-badge>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="primary" (click)="openEdit(user)">
+          <ion-icon slot="icon-only" name="create"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="deleteUser(user.id)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+      
+    </ion-item-sliding>
   </ion-list>
 
   <ion-modal [isOpen]="isModalOpen">
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Novi nalog</ion-title>
+          <ion-title>{{ isEditMode ? 'Izmena naloga' : 'Novi nalog' }}</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="isModalOpen = false">Zatvori</ion-button>
+            <ion-button (click)="closeModal()">Zatvori</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -43,19 +56,19 @@
           <ion-input label="Ime" labelPlacement="stacked" [(ngModel)]="newUser.firstName" name="firstName" required="true"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Prezime" labelPlacement="stacked" [(ngModel)]="newUser.lastName" name="firstName" required="true"></ion-input>
+          <ion-input label="Prezime" labelPlacement="stacked" [(ngModel)]="newUser.lastName" name="lastName" required="true"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Korisničko ime" labelPlacement="stacked" [(ngModel)]="newUser.username" name="firstName" required="true"></ion-input>
+          <ion-input label="Korisničko ime" labelPlacement="stacked" [(ngModel)]="newUser.username" name="username" required="true"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Lozinka" type="password" labelPlacement="stacked" [(ngModel)]="newUser.password" name="firstName" required="true"></ion-input>
+          <ion-input label="Lozinka" type="password" labelPlacement="stacked" [(ngModel)]="newUser.password" name="password" required="true"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Broj pasoša" labelPlacement="stacked" [(ngModel)]="newUser.passportNumber" name="firstName" required="true"></ion-input>
+          <ion-input label="Broj pasoša" labelPlacement="stacked" [(ngModel)]="newUser.passportNumber" name="passport" required="true"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Broj lične karte" labelPlacement="stacked" [(ngModel)]="newUser.idCardNumber" name="firstName" required="true"></ion-input>
+          <ion-input label="Broj lične karte" labelPlacement="stacked" [(ngModel)]="newUser.idCardNumber" name="idCard" required="true"></ion-input>
         </ion-item>
         <ion-item>
           <ion-select label="Rola" [(ngModel)]="newUser.role">
@@ -64,8 +77,9 @@
           </ion-select>
         </ion-item>
 
-        <ion-button expand="block" (click)="saveUser()" class="ion-margin-top" [disabled]="!newUser.firstName || !newUser.lastName || !newUser.username || !newUser.password || !newUser.passportNumber || !newUser.idCardNumber">
-          Sačuvaj
+        <ion-button expand="block" (click)="saveUser()" class="ion-margin-top" 
+          [disabled]="!newUser.firstName || !newUser.lastName || !newUser.username || !newUser.password || !newUser.passportNumber || !newUser.idCardNumber">
+          {{ isEditMode ? 'Sačuvaj izmene' : 'Napravi nalog' }}
         </ion-button>
       </ion-content>
     </ng-template>

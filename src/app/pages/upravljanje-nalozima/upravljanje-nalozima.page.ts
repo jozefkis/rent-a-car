@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonMenuButton,
   IonList, IonItem, IonLabel, IonBadge, IonSpinner, IonButton, IonIcon, 
-  IonModal, IonInput, IonSelect, IonSelectOption 
+  IonModal, IonInput, IonSelect, IonSelectOption, IonItemSliding, 
+  IonItemOptions, IonItemOption, AlertController 
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { add } from 'ionicons/icons';
+import { add, trash, create } from 'ionicons/icons';
 import { DataService } from '../../core/services/data.service';
 
 @Component({
@@ -18,15 +19,18 @@ import { DataService } from '../../core/services/data.service';
   imports: [
     CommonModule, FormsModule, IonContent, IonHeader, IonTitle, IonToolbar, 
     IonButtons, IonMenuButton, IonList, IonItem, IonLabel, IonBadge, 
-    IonSpinner, IonButton, IonIcon, IonModal, IonInput, IonSelect, IonSelectOption
+    IonSpinner, IonButton, IonIcon, IonModal, IonInput, IonSelect, 
+    IonSelectOption, IonItemSliding, IonItemOptions, IonItemOption
   ]
 })
 export class UpravljanjeNalozimaPage implements OnInit {
 
   users: any[] = [];
   isModalOpen = false;
+  isEditMode = false;
+  currentUserId: string | null = null;
 
-  newUser = {
+  newUser: any = {
     firstName: '',
     lastName: '',
     username: '',
@@ -36,8 +40,8 @@ export class UpravljanjeNalozimaPage implements OnInit {
     role: 'customer'
   };
 
-  constructor(private dbService: DataService) {
-    addIcons({ add });
+  constructor(private dbService: DataService, private alertCtrl: AlertController) {
+    addIcons({ add, trash, create });
   }
 
   ngOnInit() {
@@ -45,19 +49,49 @@ export class UpravljanjeNalozimaPage implements OnInit {
   }
 
   loadUsers() {
-    this.dbService.getUsers().subscribe((data: any) => {
-      this.users = data;
+    this.dbService.getUsers().subscribe({
+      next: (data: any) => {
+        // Sortiranje: Admini na vrh, pa abecedno po imenu
+        this.users = data.sort((a: any, b: any) => {
+          if (a.role === 'admin' && b.role !== 'admin') return -1;
+          if (a.role !== 'admin' && b.role === 'admin') return 1;
+          return a.firstName.localeCompare(b.firstName);
+        });
+      }
     });
   }
 
-  saveUser() {
-      this.dbService.addUser(this.newUser as any).subscribe(() => {
-      this.isModalOpen = false;
+  openEdit(user: any) {
+    this.isEditMode = true;
+    this.currentUserId = user.id;
+    this.newUser = { ...user };
+    this.isModalOpen = true;
+  }
+
+  deleteUser(id: string) {
+    this.dbService.deleteUser(id).subscribe(() => {
       this.loadUsers();
-      this.newUser = { 
-        firstName: '', lastName: '', username: '', password: '', 
-        passportNumber: '', idCardNumber: '', role: 'customer' 
-      };
     });
+  }
+
+  async saveUser() {
+    if (this.isEditMode && this.currentUserId) {
+      this.dbService.updateUser(this.currentUserId, this.newUser).subscribe(() => {
+        this.closeModal();
+        this.loadUsers();
+      });
+    } else {
+      this.dbService.addUser(this.newUser).subscribe(() => {
+        this.closeModal();
+        this.loadUsers();
+      });
+    }
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.isEditMode = false;
+    this.currentUserId = null;
+    this.newUser = { firstName: '', lastName: '', username: '', password: '', passportNumber: '', idCardNumber: '', role: 'customer' };
   }
 }
