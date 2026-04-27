@@ -1,61 +1,70 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // BehaviorSubject ili obična varijabla za čuvanje stanja u memoriji
-  private currentUser: User | null = null;
+  
+  // 1. BehaviorSubject čuva trenutno stanje korisnika.
+  // Inicijalno pokušava da pročita 'loggedUser' iz localStorage-a.
+  private currentUserSubject = new BehaviorSubject<User | null>(
+    JSON.parse(localStorage.getItem('loggedUser') || 'null')
+  );
 
-  constructor() {
-    // Čim se aplikacija pokrene, proveravamo da li u memoriji imamo sačuvanog usera
-    const savedUser = localStorage.getItem('loggedUser');
-    if (savedUser) {
-      try {
-        this.currentUser = JSON.parse(savedUser);
-      } catch (e) {
-        console.error('Greška pri čitanju korisnika iz memorije', e);
-        this.logout();
-      }
-    }
-  }
+  // 2. Observable koji komponente mogu da "slušaju" (npr. za prikaz imena u meniju)
+  public currentUser$ = this.currentUserSubject.asObservable();
+
+  constructor(private router: Router) { }
 
   /**
-   * Postavlja korisnika kao ulogovanog i čuva ga u memoriji
+   * Postavlja korisnika u sesiju i obaveštava celu aplikaciju
    */
-  setCurrentUser(user: User) {
-    this.currentUser = user;
-    // Čuvamo ceo objekat (bez lozinke ako želiš da budeš sigurniji, ali za seminarski može sve)
+  setCurrentUser(user: User): void {
     localStorage.setItem('loggedUser', JSON.stringify(user));
+    // Emitujemo novu vrednost svim pretplatnicima
+    this.currentUserSubject.next(user);
   }
 
   /**
-   * Vraća podatke o trenutno ulogovanom korisniku
+   * Vraća trenutnu vrednost korisnika (snapshot)
    */
   getLoggedUser(): User | null {
-    return this.currentUser;
+    return this.currentUserSubject.value;
   }
 
   /**
-   * Proverava da li je iko ulogovan
+   * Sinhrona provera da li je korisnik ulogovan
    */
   isLoggedIn(): boolean {
-    return this.currentUser !== null;
+    return this.currentUserSubject.value !== null;
   }
 
   /**
-   * Proverava da li je ulogovani korisnik administrator
+   * Provera uloge korisnika
    */
   isAdmin(): boolean {
-    return this.currentUser?.role === 'admin';
+    const user = this.currentUserSubject.value;
+    return user?.role === 'admin';
   }
 
   /**
-   * Odjavljuje korisnika i čisti memoriju
+   * Kompletna odjava: čišćenje memorije, storage-a i preusmeravanje
    */
-  logout() {
-    this.currentUser = null;
+  logout(): void {
+    // 1. Čistimo sav storage
     localStorage.removeItem('loggedUser');
+    localStorage.clear();
+
+    // 2. Javljamo BehaviorSubject-u da je korisnik sada NULL
+    // Ovo odmah menja rezultat funkcije isLoggedIn() na false
+    this.currentUserSubject.next(null);
+
+    // 3. Prebacujemo na login uz "replaceUrl" da se ne bi mogao vratiti nazad na "back"
+    this.router.navigate(['/login'], { replaceUrl: true });
+    
+    console.log('Korisnik uspešno odjavljen.');
   }
 }

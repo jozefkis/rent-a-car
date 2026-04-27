@@ -15,6 +15,7 @@ import {
   personOutline, personSharp, carOutline, carSharp, 
   documentOutline, documentSharp,
 } from 'ionicons/icons';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -42,7 +43,7 @@ export class AppComponent {
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
   // Dodajemo servise u constructor
-  constructor(private router: Router, private menuCtrl: MenuController) {
+  constructor(private router: Router, private menuCtrl: MenuController, private authService: AuthService) {
     addIcons({ 
       mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, 
       heartOutline, heartSharp, archiveOutline, archiveSharp, 
@@ -60,6 +61,7 @@ export class AppComponent {
 
   // Funkcija za odjavu
   logout() {
-    this.router.navigate(['/login']); // Prebaci na login
+    this.authService.logout();
+    this.menuCtrl.enable(false);
   }
 }
