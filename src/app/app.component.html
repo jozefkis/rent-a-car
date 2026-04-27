@@ -6,18 +6,42 @@
           <ion-list-header>Rent-a-Car</ion-list-header>
           <ion-note>Korisnički panel</ion-note>
 
-          @for (p of appPages; track p; let i = $index) {
-          <ion-menu-toggle auto-hide="false">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
-              routerLinkActive="selected">
-              <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
+          @for (p of appPages; track p.title) {
+            @if (shouldShowPage(p)) {
+              <ion-menu-toggle auto-hide="false">
+                <ion-item
+                  [routerLink]="[p.url]"
+                  routerDirection="forward"
+                  routerLinkActive="selected"
+                  lines="none"
+                  detail="false"
+                  style="cursor: pointer"
+                >
+                  <ion-icon
+                    aria-hidden="true"
+                    slot="start"
+                    [ios]="p.icon + '-outline'"
+                    [md]="p.icon + '-sharp'"
+                  ></ion-icon>
+                  <ion-label>{{ p.title }}</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
+            }
           }
+
           <ion-menu-toggle auto-hide="false">
-            <ion-item (click)="logout()" lines="none" detail="false" style="cursor: pointer;">
-              <ion-icon slot="start" [ios]="'log-out-outline'" [md]="'log-out-sharp'" color="danger"></ion-icon>
+            <ion-item
+              (click)="logout()"
+              lines="none"
+              detail="false"
+              style="cursor: pointer"
+            >
+              <ion-icon
+                slot="start"
+                ios="log-out-outline"
+                md="log-out-sharp"
+                color="danger"
+              ></ion-icon>
               <ion-label color="danger">Odjavi se</ion-label>
             </ion-item>
           </ion-menu-toggle>
