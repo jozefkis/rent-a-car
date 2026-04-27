@@ -1,24 +1,118 @@
-.login-container {
+// Centriranje celog sadržaja na stranici
+.login-wrapper {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100%;
+  width: 100%;
 }
 
+.login-container {
+  width: 100%;
+  max-width: 420px; // Malo šire za prostraniji osećaj
+  padding: 20px;
+}
+
+// Stil za logo sa krugom oko automobila
 .logo-section {
-  margin-bottom: 50px;
+  margin-bottom: 50px; // Veliki razmak ispod logoa
+
+  .icon-circle {
+    background-color: rgba(var(--ion-color-primary-rgb), 0.1);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    
+    ion-icon {
+      font-size: 70px;
+    }
+  }
+
   h1 {
-    font-weight: 800;
-    font-size: 2.5rem;
-    margin-top: 10px;
+    font-weight: 800; // Ekstra debela slova
+    font-size: 2.2rem;
+    margin: 0;
+    color: var(--ion-color-dark);
   }
   p {
-    color: #666;
+    color: var(--ion-color-medium);
+    margin-top: 5px;
+    font-size: 1.1rem;
   }
 }
 
+// Modernizacija input polja
 .form-section {
-  width: 100%;
-  max-width: 300px;
+  .custom-input-group {
+    margin-bottom: 25px; // Veći razmak između dva inputa
+
+    ion-label {
+      display: block;
+      text-align: left;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      margin-bottom: 10px; // Razmak između labele i samog inputa
+      padding-left: 5px;
+    }
+
+    .modern-input {
+      --background: #fdfdfd; // Blago krem bela pozadina
+      border-radius: 16px; // Jako zaobljene ivice
+      border: 1px solid #e0e0e0; // Diskretan okvir
+      transition: all 0.3s ease;
+      
+      // Senka (elevation) koja daje dubinu
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); 
+
+      &.ion-focused {
+        border-color: var(--ion-color-primary); // Plavi okvir na fokus
+        box-shadow: 0 6px 12px rgba(var(--ion-color-primary-rgb), 0.15);
+      }
+
+      ion-icon {
+        margin-right: 15px; // Razmak od ikonice do teksta
+        font-size: 22px;
+      }
+
+      ion-input {
+        --padding-start: 0;
+        --padding-top: 15px; // Veći unutrašnji razmak (padding)
+        --padding-bottom: 15px;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+// Stil za veliko dugme
+.login-button {
+  --padding-top: 25px;
+  --padding-bottom: 25px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 40px; // Veliki razmak iznad dugmeta
+  
+  // Senka za dugme
+  box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
+}
+
+// Stil za linkove u dnu
+.footer-links {
+  p {
+    font-size: 1rem;
+    color: var(--ion-color-medium);
+  }
+  a {
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--ion-color-primary);
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

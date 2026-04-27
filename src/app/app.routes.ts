@@ -10,14 +10,12 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage),
   },
-  {
-    path: 'register',
-    loadComponent: () => import('./pages/register/register.page').then(m => m.RegisterPage),
-  },
+  
   {
     path: 'folder/:id',
     loadComponent: () => import('./folder/folder.page').then(m => m.FolderPage),
-  },  {
+  },
+  {
     path: 'upravljanje-nalozima',
     loadComponent: () => import('./pages/upravljanje-nalozima/upravljanje-nalozima.page').then( m => m.UpravljanjeNalozimaPage)
   },

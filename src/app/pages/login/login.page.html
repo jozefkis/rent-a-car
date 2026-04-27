@@ -1,5 +1,6 @@
 <ion-content [fullscreen]="true" class="ion-padding ion-text-center">
   <div class="login-container">
+    
     <div class="logo-section">
       <ion-icon name="car-sport" style="font-size: 80px; color: var(--ion-color-primary);"></ion-icon>
       <h1>Rent-a-Car</h1>
@@ -7,10 +8,24 @@
     </div>
 
     <div class="form-section">
-      <ion-button expand="block" shape="round" (click)="onLogin()">
+      <ion-item fill="outline" class="ion-margin-bottom modern-input">
+        <ion-label position="floating">Korisničko ime</ion-label>
+        <ion-input type="text" [(ngModel)]="username"></ion-input>
+      </ion-item>
+
+      <ion-item fill="outline" class="ion-margin-bottom modern-input">
+        <ion-label position="floating">Lozinka</ion-label>
+        <ion-input type="password" [(ngModel)]="password" (keyup.enter)="onLogin()"></ion-input>
+      </ion-item>
+      <ion-button expand="block" shape="round" (click)="onLogin()" class="ion-margin-top login-btn">
         Prijavi se
         <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
       </ion-button>
+
+      <p class="ion-margin-top">
+        Nemaš nalog? <a [routerLink]="['/register']">Registruj se</a>
+      </p>
     </div>
+
   </div>
 </ion-content>
