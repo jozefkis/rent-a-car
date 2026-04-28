@@ -4,13 +4,96 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Upravljanje vozilima</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="isModalOpen = true">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">upravljanje-vozilima</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-list lines="full">
+    <ion-item-sliding *ngFor="let v of vehicles">
+      <ion-item>
+        <ion-label>
+          <h2 style="font-weight: bold;">{{ v.brand }} {{ v.model }} ({{ v.year }})</h2>
+          <p>Gorivo: {{ v.fuel }} | Menjač: {{ v.transmission }}</p>
+          <p>Cena po danu: <strong>{{ v.pricePerDay }}€</strong></p>
+        </ion-label>
+        <ion-badge slot="end" [color]="v.isAvailable ? 'success' : 'medium'">
+          {{ v.isAvailable ? 'Dostupno' : 'Zauzeto' }}
+        </ion-badge>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="primary" (click)="openEdit(v)">
+          <ion-icon slot="icon-only" name="create"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="deleteVehicle(v.id)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ isEditMode ? 'Izmena vozila' : 'Novo vozilo' }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">Zatvori</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-input label="Marka" labelPlacement="stacked" [(ngModel)]="newVehicle.brand" required="true"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Model" labelPlacement="stacked" [(ngModel)]="newVehicle.model" required="true"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Godište" type="number" labelPlacement="stacked" [(ngModel)]="newVehicle.year" required="true"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Snaga motora (kW)" type="number" labelPlacement="stacked" [(ngModel)]="newVehicle.enginePower" required="true"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-select label="Menjač" [(ngModel)]="newVehicle.transmission">
+            <ion-select-option value="manual">Manual</ion-select-option>
+            <ion-select-option value="automatic">Automatic</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Broj sedišta" type="number" labelPlacement="stacked" [(ngModel)]="newVehicle.seats" required="true"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Gorivo" labelPlacement="stacked" [(ngModel)]="newVehicle.fuel" required="true"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-select label="Kategorija" [(ngModel)]="newVehicle.category">
+            <ion-select-option value="Economy">Economy</ion-select-option>
+            <ion-select-option value="Business">Business</ion-select-option>
+            <ion-select-option value="Luxury">Luxury</ion-select-option>
+            <ion-select-option value="SUV">SUV</ion-select-option>
+            <ion-select-option value="Sport">Sport</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Cena po danu (€)" type="number" labelPlacement="stacked" [(ngModel)]="newVehicle.pricePerDay" required="true"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-checkbox [(ngModel)]="newVehicle.isAvailable">Dostupno za rentiranje</ion-checkbox>
+        </ion-item>
+
+        <ion-button expand="block" (click)="saveVehicle()" class="ion-margin-top"
+          [disabled]="!newVehicle.brand || !newVehicle.model || !newVehicle.year || !newVehicle.pricePerDay">
+          {{ isEditMode ? 'Sačuvaj izmene' : 'Dodaj vozilo' }}
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
