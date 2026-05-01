@@ -85,6 +85,7 @@ export class AppComponent {
       icon: 'document',
       onlyAdmin: true,
     },
+    { title: 'Home', url: '/home', icon: 'home', onlyAdmin: false  },
     { title: 'Inbox', url: '/folder/inbox', icon: 'mail', onlyAdmin: false },
     { title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane', onlyAdmin: false  },
     { title: 'Favorites', url: '/folder/favorites', icon: 'heart', onlyAdmin: false  },

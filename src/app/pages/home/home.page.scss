@@ -1,0 +1,187 @@
+// Celokupna pozadina (čista, svetlija od bazične dark mode sive ako koristiš dark)
+.home-content {
+  --background: var(--ion-color-step-50);
+}
+
+// Minimalistički toolbar
+.home-toolbar {
+  --background: transparent;
+  padding-top: 10px;
+}
+
+// Top sekcija
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  
+  h2 {
+    margin: 0;
+    font-weight: 700;
+    color: var(--ion-color-step-800);
+  }
+
+  .filter-btn {
+    --color: var(--ion-color-step-600);
+    ion-icon {
+      font-size: 24px;
+    }
+  }
+}
+
+// Čista kartica
+.premium-card {
+  --background: var(--ion-color-step-50); // Čista, bez sive
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  margin-bottom: 20px;
+  
+  // Header: Subtitle i Title u redu sa Info dugmetom
+  .card-header-premium {
+    ion-card-subtitle {
+      font-weight: 600;
+      color: var(--ion-color-step-400);
+      margin-bottom: 2px;
+    }
+
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      ion-card-title {
+        font-weight: 700;
+        color: var(--ion-color-step-900);
+        margin: 0;
+      }
+
+      .info-btn {
+        margin: 0;
+        margin-right: -10px; // Malo odmakni od ivice
+        --padding-start: 10px;
+        --padding-end: 10px;
+        
+        ion-icon {
+          font-size: 22px;
+        }
+      }
+    }
+  }
+
+  // Kontejner slike: Centralno i čisto
+  .image-container-premium {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 180px;
+    margin-top: 5px;
+    
+    img {
+      max-width: 90%;
+      height: 100%;
+      object-fit: contain; // Premium slika se ne rasteže
+    }
+  }
+
+  // Info sekcija (gorivo, menjac, godiste, sedista)
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); // 2x2 raspored
+    gap: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--ion-color-step-150);
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ion-color-step-600);
+      
+      ion-icon {
+        font-size: 18px;
+        color: var(--ion-color-primary); // Tvoja boja
+      }
+      span {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  // Donji red: Cena i Dugme
+  .price-action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--ion-color-step-150);
+    padding-top: 15px;
+
+    .price-box {
+      .price-num {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--ion-color-step-900);
+      }
+      .price-text {
+        font-size: 0.9rem;
+        color: var(--ion-color-step-500);
+        margin-left: 3px;
+      }
+    }
+
+    ion-button {
+      --padding-start: 25px;
+      --padding-end: 25px;
+      --border-radius: 12px;
+      height: 40px;
+    }
+  }
+}
+
+// Minimalistički Searchbar
+.custom-search {
+  --background: transparent;
+  --border-radius: 12px;
+  --placeholder-color: var(--ion-color-step-400);
+  --color: var(--ion-color-step-800);
+  --icon-color: var(--ion-color-step-600);
+  margin-bottom: 10px;
+  --box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+// Modal info: Tvoja boja
+.modal-premium-info {
+  border-bottom: 1px solid var(--ion-color-step-150);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  h2 {
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+.filter-label {
+  display: block;
+  margin-top: 15px;
+  font-size: 0.95rem;
+  color: var(--ion-color-dark);
+}
+
+.filter-group {
+  padding: 0 5px;
+  margin-bottom: 10px;
+}
+
+.filter-item-card {
+  --background: var(--ion-color-light);
+  --border-radius: 12px;
+  --padding-start: 12px;
+  margin-top: 5px;
+  
+  ion-label {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--ion-color-medium);
+  }
+}

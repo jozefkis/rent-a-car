@@ -9,13 +9,9 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage),
+    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
   },
-  {
-    path: 'folder/:id',
-    loadComponent: () => import('./folder/folder.page').then(m => m.FolderPage),
-    canActivate: [authGuard] // Mora biti ulogovan
-  },
+  
   {
     path: 'upravljanje-nalozima',
     loadComponent: () => import('./pages/upravljanje-nalozima/upravljanje-nalozima.page').then(m => m.UpravljanjeNalozimaPage),
@@ -37,7 +33,17 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage),
-    // canActivate: [authGuard]
-  }
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.page').then( m => m.HomePage),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'folder/:id',
+    loadComponent: () => import('./folder/folder.page').then(m => m.FolderPage),
+    canActivate: [authGuard]
+  },
+
 
 ];
