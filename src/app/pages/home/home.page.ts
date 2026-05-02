@@ -48,7 +48,10 @@ import {
 import { Subscription } from 'rxjs';
 
 // NOVI IMPORTI ZA KALENDAR I DATUME
-import { CalendarComponentOptions, IonRangeCalendarComponent } from '@googlproxer/ion-range-calendar';
+import {
+  CalendarComponentOptions,
+  IonRangeCalendarComponent,
+} from '@googlproxer/ion-range-calendar';
 import { differenceInDays, parseISO, startOfDay, subDays } from 'date-fns';
 
 // Modeli i Servisi
@@ -86,13 +89,13 @@ import { DateUtils } from '../../utils/date.utils';
     IonModal,
     IonItem,
     IonLabel,
-    IonInput, // Izbacio sam IonDatetime jer koristimo novi kalendar
+    IonInput,
     IonList,
     IonRange,
     IonSelect,
     IonSelectOption,
     IonSpinner,
-    IonRangeCalendarComponent // DODATO OVDE
+    IonRangeCalendarComponent, // DODATO OVDE
   ],
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -103,7 +106,9 @@ export class HomePage implements OnInit, OnDestroy {
   // Rezervacije i datumi
   occupiedDates: string[] = []; // Promenjeno u niz jer kalendar voli niz stringova
   today: Date = new Date();
-  
+  bookedIntervals: { start: Date; end: Date }[] = [];
+  initialDisabledDates: any[] = [];
+
   // NOVO: Range selection podaci usklađeni sa tvojim novim kalendarom
   dateRange: { from: string; to: string } = { from: '', to: '' };
   type: 'string' = 'string';
@@ -115,7 +120,7 @@ export class HomePage implements OnInit, OnDestroy {
     from: subDays(new Date(), 1),
     weekStart: 1,
     color: 'primary',
-    daysConfig: [] // Ovde ćemo puniti zauzete termine
+    daysConfig: [], // Ovde ćemo puniti zauzete termine
   };
 
   // Stanja
@@ -187,36 +192,58 @@ export class HomePage implements OnInit, OnDestroy {
   // --- LOGIKA ZA KALENDAR ---
 
   onRangeChange() {
-    if (this.dateRange && this.dateRange.from && this.dateRange.to) {
-      const start = parseISO(this.dateRange.from);
-      const end = parseISO(this.dateRange.to);
-      // Koristimo date-fns differenceInDays + 1
-      this.brojDana = differenceInDays(end, start) + 1;
-    } else {
+    if (!this.dateRange?.from || !this.dateRange?.to) return;
+
+    const start = parseISO(this.dateRange.from);
+    const end = parseISO(this.dateRange.to);
+
+    const isValid = this.isRangeValid(start, end);
+
+    if (!isValid) {
+      // reset izbora
+      this.dateRange = { from: '', to: '' };
       this.brojDana = 0;
+
+      console.log('Nevalidan range');
+      return;
     }
+
+    this.brojDana = differenceInDays(end, start) + 1;
   }
 
   ucitajZauzeteTermine(vehicleId: string) {
     this.reservationService.getReservationsForVehicle(vehicleId).subscribe({
       next: (reservations) => {
         const disabledDates: any[] = [];
+
+        this.bookedIntervals = reservations.map((res) => ({
+          start: parseISO(res.startDate),
+          end: parseISO(res.endDate),
+        }));
+
         reservations.forEach((res) => {
           const range = DateUtils.getDatesInRange(res.startDate, res.endDate);
           range.forEach((dateString) => {
             disabledDates.push({
               date: parseISO(dateString),
-              disable: true
+              disable: true,
             });
           });
         });
-        // Ažuriramo opcije kalendara sa blokiranim datumima
+        this.initialDisabledDates = disabledDates;
+
         this.optionsRange = {
           ...this.optionsRange,
-          daysConfig: disabledDates
+          daysConfig: disabledDates,
         };
       },
     });
+  }
+
+  isRangeValid(start: Date, end: Date): boolean {
+    return !this.bookedIntervals.some((interval) =>
+      DateUtils.isOverlapping(start, end, interval.start, interval.end),
+    );
   }
 
   // --- FILTERI I PRETRAGA (Ostalo isto kao tvoje) ---
@@ -225,12 +252,25 @@ export class HomePage implements OnInit, OnDestroy {
     this.vozila = this.allVehicles.filter((auto) => {
       const matchPrice = auto.pricePerDay <= this.filters.maxPrice;
       const matchPower = auto.enginePower >= this.filters.minPower;
-      const matchFuel = this.filters.fuel === 'Sva' || auto.fuel === this.filters.fuel;
-      const matchCategory = this.filters.category === 'Sve' || auto.category === this.filters.category;
-      const matchTrans = this.filters.transmission === 'Svi' || auto.transmission === this.filters.transmission;
-      const matchSeats = this.filters.seats === 0 || auto.seats === this.filters.seats;
+      const matchFuel =
+        this.filters.fuel === 'Sva' || auto.fuel === this.filters.fuel;
+      const matchCategory =
+        this.filters.category === 'Sve' ||
+        auto.category === this.filters.category;
+      const matchTrans =
+        this.filters.transmission === 'Svi' ||
+        auto.transmission === this.filters.transmission;
+      const matchSeats =
+        this.filters.seats === 0 || auto.seats === this.filters.seats;
 
-      return matchPrice && matchPower && matchFuel && matchCategory && matchTrans && matchSeats;
+      return (
+        matchPrice &&
+        matchPower &&
+        matchFuel &&
+        matchCategory &&
+        matchTrans &&
+        matchSeats
+      );
     });
     this.isFilterModalOpen = false;
   }
@@ -269,18 +309,30 @@ export class HomePage implements OnInit, OnDestroy {
 
   otvoriRezervaciju(auto: Vehicle) {
     this.selectedAuto = { ...auto };
-    this.dateRange = { from: '', to: '' }; // Resetujemo novi range
+
+    // 1. reset UI state
+    this.dateRange = { from: '', to: '' };
     this.brojDana = 0;
-    
+
+    // 2. privremeno očisti kalendar da ne pokazuje stare podatke
+    this.optionsRange = {
+      ...this.optionsRange,
+      daysConfig: [],
+    };
+
+    // 3. otvori modal ODMAH (UX da se vidi odmah)
+    this.isModalOpen = true;
+
+    // 4. učitaj zauzete termine za novo vozilo
     if (auto.id) {
       this.ucitajZauzeteTermine(auto.id);
     }
-    this.isModalOpen = true;
   }
 
   async potvrdiRezervaciju() {
     // Provera pomoću novog dateRange objekta
-    if (!this.selectedAuto || !this.selectedAuto.id || !this.dateRange.to) return;
+    if (!this.selectedAuto || !this.selectedAuto.id || !this.dateRange.to)
+      return;
 
     const novaRezervacija: Reservation = {
       userId: 'test-user-123',

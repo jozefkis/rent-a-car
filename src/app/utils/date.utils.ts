@@ -9,14 +9,11 @@ export class DateUtils {
     let currentDate = new Date(startDate);
     const lastDate = new Date(endDate);
 
-    // Postavljamo na početak dana da izbegnemo probleme sa satima
-    currentDate.setHours(0, 0, 0, 0);
-    lastDate.setHours(0, 0, 0, 0);
-
     while (currentDate <= lastDate) {
       dates.push(currentDate.toISOString().split('T')[0]);
       currentDate.setDate(currentDate.getDate() + 1);
     }
+
     return dates;
   }
 
