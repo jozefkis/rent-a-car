@@ -61,6 +61,7 @@ import { DataService } from '../../core/services/data.service';
 import { ReservationService } from '../../core/services/reservation.service';
 import { DateUtils } from '../../utils/date.utils';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { VehicleCardComponent } from '../../components/vehicle-card/vehicle-card.component';
 
 @Component({
   selector: 'app-home',
@@ -96,7 +97,8 @@ import { AuthService } from 'src/app/core/services/auth.service';
     IonSelect,
     IonSelectOption,
     IonSpinner,
-    IonRangeCalendarComponent, // DODATO OVDE
+    IonRangeCalendarComponent,
+    VehicleCardComponent
   ],
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -298,7 +300,8 @@ export class HomePage implements OnInit, OnDestroy {
     this.vozila = this.allVehicles.filter(
       (auto) =>
         auto.brand.toLowerCase().includes(query) ||
-        auto.model.toLowerCase().includes(query),
+        auto.model.toLowerCase().includes(query) ||
+        auto.category.toLocaleLowerCase().includes(query)
     );
   }
 
