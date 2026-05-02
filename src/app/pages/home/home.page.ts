@@ -60,6 +60,7 @@ import { Reservation } from '../../core/models/reservation.model';
 import { DataService } from '../../core/services/data.service';
 import { ReservationService } from '../../core/services/reservation.service';
 import { DateUtils } from '../../utils/date.utils';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -147,6 +148,7 @@ export class HomePage implements OnInit, OnDestroy {
     private dataService: DataService,
     private reservationService: ReservationService,
     private toastController: ToastController,
+    private authService: AuthService,
   ) {
     addIcons({
       optionsOutline,
@@ -330,12 +332,26 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async potvrdiRezervaciju() {
+    const loggedUser = this.authService.getLoggedUser();
+
+    // 2. Provera da li je korisnik uopšte ulogovan
+    if (!loggedUser || !loggedUser.id) {
+      const toast = await this.toastController.create({
+        message: 'Morate biti ulogovani da biste rezervisali vozilo!',
+        duration: 3000,
+        color: 'danger',
+        position: 'top'
+      });
+      await toast.present();
+      return;
+    }
+
     // Provera pomoću novog dateRange objekta
     if (!this.selectedAuto || !this.selectedAuto.id || !this.dateRange.to)
       return;
 
     const novaRezervacija: Reservation = {
-      userId: 'test-user-123',
+      userId: loggedUser.id,
       vehicleId: this.selectedAuto.id,
       startDate: this.dateRange.from,
       endDate: this.dateRange.to,
