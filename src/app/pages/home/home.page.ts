@@ -52,7 +52,7 @@ import {
   CalendarComponentOptions,
   IonRangeCalendarComponent,
 } from '@googlproxer/ion-range-calendar';
-import { differenceInDays, parseISO, startOfDay, subDays } from 'date-fns';
+import { differenceInDays, parseISO, subDays } from 'date-fns';
 
 // Modeli i Servisi
 import { Vehicle } from '../../core/models/vehicle.model';
@@ -107,23 +107,21 @@ export class HomePage implements OnInit, OnDestroy {
   vozila: Vehicle[] = [];
 
   // Rezervacije i datumi
-  occupiedDates: string[] = []; // Promenjeno u niz jer kalendar voli niz stringova
+  occupiedDates: string[] = [];
   today: Date = new Date();
   bookedIntervals: { start: Date; end: Date }[] = [];
   initialDisabledDates: any[] = [];
 
-  // NOVO: Range selection podaci usklađeni sa tvojim novim kalendarom
   dateRange: { from: string; to: string } = { from: '', to: '' };
   type: 'string' = 'string';
   brojDana: number = 0;
 
-  // Opcije za novi kalendar
   optionsRange: CalendarComponentOptions = {
     pickMode: 'range',
     from: subDays(new Date(), 1),
     weekStart: 1,
     color: 'primary',
-    daysConfig: [], // Ovde ćemo puniti zauzete termine
+    daysConfig: [],
   };
 
   // Stanja
@@ -172,6 +170,11 @@ export class HomePage implements OnInit, OnDestroy {
     this.ucitajVozila();
   }
 
+  // KLJUČNO: Osvežava podatke svaki put kada se stranica ponovo pojavi na ekranu
+  ionViewWillEnter() {
+    this.ucitajVozila();
+  }
+
   ngOnDestroy() {
     if (this.vehicleSub) {
       this.vehicleSub.unsubscribe();
@@ -180,7 +183,8 @@ export class HomePage implements OnInit, OnDestroy {
 
   ucitajVozila() {
     this.isLoading = true;
-    this.vehicleSub = this.dataService.getVehicles().subscribe({
+    // Koristimo tvoju novu funkciju koja vraća samo dostupna vozila
+    this.vehicleSub = this.dataService.getAvailableVehicles().subscribe({
       next: (data) => {
         this.allVehicles = data;
         this.vozila = [...this.allVehicles];
@@ -204,11 +208,8 @@ export class HomePage implements OnInit, OnDestroy {
     const isValid = this.isRangeValid(start, end);
 
     if (!isValid) {
-      // reset izbora
       this.dateRange = { from: '', to: '' };
       this.brojDana = 0;
-
-      console.log('Nevalidan range');
       return;
     }
 
@@ -250,31 +251,18 @@ export class HomePage implements OnInit, OnDestroy {
     );
   }
 
-  // --- FILTERI I PRETRAGA (Ostalo isto kao tvoje) ---
+  // --- FILTERI I PRETRAGA ---
 
   applyFilters() {
     this.vozila = this.allVehicles.filter((auto) => {
       const matchPrice = auto.pricePerDay <= this.filters.maxPrice;
       const matchPower = auto.enginePower >= this.filters.minPower;
-      const matchFuel =
-        this.filters.fuel === 'Sva' || auto.fuel === this.filters.fuel;
-      const matchCategory =
-        this.filters.category === 'Sve' ||
-        auto.category === this.filters.category;
-      const matchTrans =
-        this.filters.transmission === 'Svi' ||
-        auto.transmission === this.filters.transmission;
-      const matchSeats =
-        this.filters.seats === 0 || auto.seats === this.filters.seats;
+      const matchFuel = this.filters.fuel === 'Sva' || auto.fuel === this.filters.fuel;
+      const matchCategory = this.filters.category === 'Sve' || auto.category === this.filters.category;
+      const matchTrans = this.filters.transmission === 'Svi' || auto.transmission === this.filters.transmission;
+      const matchSeats = this.filters.seats === 0 || auto.seats === this.filters.seats;
 
-      return (
-        matchPrice &&
-        matchPower &&
-        matchFuel &&
-        matchCategory &&
-        matchTrans &&
-        matchSeats
-      );
+      return matchPrice && matchPower && matchFuel && matchCategory && matchTrans && matchSeats;
     });
     this.isFilterModalOpen = false;
   }
@@ -301,7 +289,7 @@ export class HomePage implements OnInit, OnDestroy {
       (auto) =>
         auto.brand.toLowerCase().includes(query) ||
         auto.model.toLowerCase().includes(query) ||
-        auto.category.toLocaleLowerCase().includes(query)
+        auto.category.toLowerCase().includes(query)
     );
   }
 
@@ -314,21 +302,11 @@ export class HomePage implements OnInit, OnDestroy {
 
   otvoriRezervaciju(auto: Vehicle) {
     this.selectedAuto = { ...auto };
-
-    // 1. reset UI state
     this.dateRange = { from: '', to: '' };
     this.brojDana = 0;
-
-    // 2. privremeno očisti kalendar da ne pokazuje stare podatke
-    this.optionsRange = {
-      ...this.optionsRange,
-      daysConfig: [],
-    };
-
-    // 3. otvori modal ODMAH (UX da se vidi odmah)
+    this.optionsRange = { ...this.optionsRange, daysConfig: [] };
     this.isModalOpen = true;
 
-    // 4. učitaj zauzete termine za novo vozilo
     if (auto.id) {
       this.ucitajZauzeteTermine(auto.id);
     }
@@ -337,7 +315,6 @@ export class HomePage implements OnInit, OnDestroy {
   async potvrdiRezervaciju() {
     const loggedUser = this.authService.getLoggedUser();
 
-    // 2. Provera da li je korisnik uopšte ulogovan
     if (!loggedUser || !loggedUser.id) {
       const toast = await this.toastController.create({
         message: 'Morate biti ulogovani da biste rezervisali vozilo!',
@@ -349,9 +326,7 @@ export class HomePage implements OnInit, OnDestroy {
       return;
     }
 
-    // Provera pomoću novog dateRange objekta
-    if (!this.selectedAuto || !this.selectedAuto.id || !this.dateRange.to)
-      return;
+    if (!this.selectedAuto || !this.selectedAuto.id || !this.dateRange.to) return;
 
     const novaRezervacija: Reservation = {
       userId: loggedUser.id,
@@ -374,6 +349,9 @@ export class HomePage implements OnInit, OnDestroy {
         });
         await toast.present();
         this.isModalOpen = false;
+        
+        // OSVEŽAVANJE: Odmah povuci nove podatke u slučaju da je status vozila promenjen
+        this.ucitajVozila();
       },
       error: (err) => console.error('Greška pri rezervaciji:', err),
     });

@@ -16,16 +16,17 @@
   <ion-list lines="full">
     <ion-item-sliding *ngFor="let v of vehicles">
       <ion-item>
-        <ion-thumbnail slot="start">
-          <img [src]="v.imageUrl || 'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTg9Z3_aqSLCmppsWpXYiQFvjKpGzDvbjZgSEifR56pKiSE_SdTf2UWHheyqZJFvtDn8UUJz7j691gDdxgLJSE'" />
-        </ion-thumbnail>
+        <ion-avatar slot="start" style="width: 64px; height: 64px;">
+          <img [src]="v.imageUrl || 'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTg9Z3_aqSLCmppsWpXYiQFvjKpGzDvbjZgSEifR56pKiSE_SdTf2UWHheyqZJFvtDn8UUJz7j691gDdxgLJSE'" 
+               style="object-fit: cover;" />
+        </ion-avatar>
         <ion-label>
           <h2 style="font-weight: bold;">{{ v.brand }} {{ v.model }} ({{ v.year }})</h2>
           <p>Gorivo: {{ v.fuel }} | Menjač: {{ v.transmission }}</p>
           <p>Cena po danu: <strong>{{ v.pricePerDay }}€</strong></p>
         </ion-label>
         <ion-badge slot="end" [color]="v.isAvailable ? 'success' : 'medium'">
-          {{ v.isAvailable ? 'Dostupno' : 'Zauzeto' }}
+          {{ v.isAvailable ? 'Dostupno' : 'Nedostupno' }}
         </ion-badge>
       </ion-item>
 

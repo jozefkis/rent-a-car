@@ -29,6 +29,12 @@ export class DataService {
     );
   }
 
+  getAvailableVehicles(): Observable<Vehicle[]> {
+    return this.getVehicles().pipe(
+      map(vehicles => vehicles.filter(v => v.isAvailable === true))
+    );
+  }
+
   updateVehicle(id: string, vehicle: Vehicle): Observable<any> {
     return this.http.put(`${this.baseUrl}vehicles/${id}.json`, vehicle);
   }

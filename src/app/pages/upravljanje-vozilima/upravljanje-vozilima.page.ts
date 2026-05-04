@@ -5,7 +5,7 @@ import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonMenuButton,
   IonList, IonItem, IonLabel, IonBadge, IonButton, IonIcon, IonModal, 
   IonInput, IonSelect, IonSelectOption, IonItemSliding, IonItemOptions, 
-  IonItemOption, IonCheckbox, IonThumbnail
+  IonItemOption, IonCheckbox, IonThumbnail, IonAvatar
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { add, trash, create } from 'ionicons/icons';
@@ -19,7 +19,7 @@ import { DataService } from '../../core/services/data.service';
     CommonModule, FormsModule, IonContent, IonHeader, IonTitle, IonToolbar, 
     IonButtons, IonMenuButton, IonList, IonItem, IonLabel, IonBadge, 
     IonButton, IonIcon, IonModal, IonInput, IonSelect, IonSelectOption, 
-    IonItemSliding, IonItemOptions, IonItemOption, IonCheckbox, IonThumbnail
+    IonItemSliding, IonItemOptions, IonItemOption, IonCheckbox, IonThumbnail, IonAvatar
   ]
 })
 export class UpravljanjeVozilimaPage implements OnInit {
