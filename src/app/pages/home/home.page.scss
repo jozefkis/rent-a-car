@@ -1,0 +1,78 @@
+// Celokupna pozadina (čista, svetlija od bazične dark mode sive ako koristiš dark)
+.home-content {
+  --background: var(--ion-color-step-50);
+}
+
+// Minimalistički toolbar
+.home-toolbar {
+  --background: transparent;
+  padding-top: 10px;
+}
+
+// Top sekcija
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  
+  h2 {
+    margin: 0;
+    font-weight: 700;
+    color: var(--ion-color-step-800);
+  }
+
+  .filter-btn {
+    --color: var(--ion-color-step-600);
+    ion-icon {
+      font-size: 24px;
+    }
+  }
+}
+
+// Minimalistički Searchbar
+.custom-search {
+  --background: transparent;
+  --border-radius: 12px;
+  --placeholder-color: var(--ion-color-step-400);
+  --color: var(--ion-color-step-800);
+  --icon-color: var(--ion-color-step-600);
+  margin-bottom: 10px;
+  --box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+// Modal info: Tvoja boja
+.modal-premium-info {
+  border-bottom: 1px solid var(--ion-color-step-150);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  h2 {
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+.filter-label {
+  display: block;
+  margin-top: 15px;
+  font-size: 0.95rem;
+  color: var(--ion-color-dark);
+}
+
+.filter-group {
+  padding: 0 5px;
+  margin-bottom: 10px;
+}
+
+.filter-item-card {
+  --background: var(--ion-color-light);
+  --border-radius: 12px;
+  --padding-start: 12px;
+  margin-top: 5px;
+  
+  ion-label {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--ion-color-medium);
+  }
+}

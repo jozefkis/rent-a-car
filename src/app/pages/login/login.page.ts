@@ -70,7 +70,7 @@ export class LoginPage implements OnInit {
             
             // 4. Omogući side menu i prebaci na glavnu stranu
             this.menuCtrl.enable(true);
-            this.router.navigate(['/folder/inbox']);
+            this.router.navigate(['/home']);
           } else {
             alert('Pogrešna lozinka!');
           }

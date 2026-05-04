@@ -85,12 +85,7 @@ export class AppComponent {
       icon: 'document',
       onlyAdmin: true,
     },
-    { title: 'Inbox', url: '/folder/inbox', icon: 'mail', onlyAdmin: false },
-    { title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane', onlyAdmin: false  },
-    { title: 'Favorites', url: '/folder/favorites', icon: 'heart', onlyAdmin: false  },
-    { title: 'Archived', url: '/folder/archived', icon: 'archive', onlyAdmin: false  },
-    { title: 'Trash', url: '/folder/trash', icon: 'trash', onlyAdmin: false  },
-    { title: 'Spam', url: '/folder/spam', icon: 'warning', onlyAdmin: false  },
+    { title: 'Home', url: '/home', icon: 'home', onlyAdmin: false  },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 

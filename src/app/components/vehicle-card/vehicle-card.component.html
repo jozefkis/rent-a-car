@@ -1,0 +1,46 @@
+<ion-card class="premium-card">
+  <div class="card-header-premium ion-padding-horizontal ion-padding-top">
+    <ion-card-subtitle>{{ auto.category }}</ion-card-subtitle>
+    <div class="title-row">
+      <ion-card-title>{{ auto.brand }} {{ auto.model }}</ion-card-title>
+      <ion-button fill="clear" color="medium" class="info-btn" (click)="prikaziDetalje()">
+        <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <div class="image-container-premium">
+    <img [src]="auto.imageUrl" [alt]="auto.brand" />
+  </div>
+
+  <ion-card-content class="ion-padding">
+    <div class="info-grid">
+      <div class="info-item">
+        <ion-icon name="leaf-outline"></ion-icon>
+        <span>{{ auto.fuel }}</span>
+      </div>
+      <div class="info-item">
+        <ion-icon name="options-outline"></ion-icon>
+        <span>{{ auto.transmission === 'automatic' ? 'Automatik' : 'Manuelni' }}</span>
+      </div>
+      <div class="info-item">
+        <ion-icon name="speedometer-outline"></ion-icon>
+        <span>{{ auto.enginePower }} KS</span>
+      </div>
+      <div class="info-item">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>{{ auto.seats }}</span>
+      </div>
+    </div>
+
+    <div class="price-action-row ion-margin-top">
+      <div class="price-box">
+        <span class="price-num">{{ auto.pricePerDay }}€</span>
+        <span class="price-text">/ dan</span>
+      </div>
+      <ion-button shape="round" color="primary" (click)="otvoriRezervaciju()">
+        Rezerviši
+      </ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>
