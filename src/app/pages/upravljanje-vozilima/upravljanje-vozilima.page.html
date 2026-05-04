@@ -16,6 +16,9 @@
   <ion-list lines="full">
     <ion-item-sliding *ngFor="let v of vehicles">
       <ion-item>
+        <ion-thumbnail slot="start">
+          <img [src]="v.imageUrl || 'http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTg9Z3_aqSLCmppsWpXYiQFvjKpGzDvbjZgSEifR56pKiSE_SdTf2UWHheyqZJFvtDn8UUJz7j691gDdxgLJSE'" />
+        </ion-thumbnail>
         <ion-label>
           <h2 style="font-weight: bold;">{{ v.brand }} {{ v.model }} ({{ v.year }})</h2>
           <p>Gorivo: {{ v.fuel }} | Menjač: {{ v.transmission }}</p>
@@ -85,6 +88,14 @@
         <ion-item>
           <ion-input label="Cena po danu (€)" type="number" labelPlacement="stacked" [(ngModel)]="newVehicle.pricePerDay" required="true"></ion-input>
         </ion-item>
+        <ion-item>
+          <ion-input 
+            label="URL slike vozila" 
+            labelPlacement="stacked" 
+            [(ngModel)]="newVehicle.imageUrl" >
+          </ion-input>
+        </ion-item>
+
         <ion-item>
           <ion-checkbox [(ngModel)]="newVehicle.isAvailable">Dostupno za rentiranje</ion-checkbox>
         </ion-item>

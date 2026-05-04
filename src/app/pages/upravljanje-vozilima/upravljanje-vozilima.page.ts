@@ -5,7 +5,7 @@ import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonMenuButton,
   IonList, IonItem, IonLabel, IonBadge, IonButton, IonIcon, IonModal, 
   IonInput, IonSelect, IonSelectOption, IonItemSliding, IonItemOptions, 
-  IonItemOption, IonCheckbox 
+  IonItemOption, IonCheckbox, IonThumbnail
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { add, trash, create } from 'ionicons/icons';
@@ -19,7 +19,7 @@ import { DataService } from '../../core/services/data.service';
     CommonModule, FormsModule, IonContent, IonHeader, IonTitle, IonToolbar, 
     IonButtons, IonMenuButton, IonList, IonItem, IonLabel, IonBadge, 
     IonButton, IonIcon, IonModal, IonInput, IonSelect, IonSelectOption, 
-    IonItemSliding, IonItemOptions, IonItemOption, IonCheckbox
+    IonItemSliding, IonItemOptions, IonItemOption, IonCheckbox, IonThumbnail
   ]
 })
 export class UpravljanjeVozilimaPage implements OnInit {
@@ -31,7 +31,7 @@ export class UpravljanjeVozilimaPage implements OnInit {
   newVehicle: any = {
     brand: '',
     model: '',
-    year: 2024,
+    year: 2026,
     enginePower: 0,
     transmission: 'manual',
     seats: 5,
@@ -39,6 +39,7 @@ export class UpravljanjeVozilimaPage implements OnInit {
     fuel: '',
     category: 'Economy',
     pricePerDay: 0,
+    imageUrl: '',
     isAvailable: true
   };
 
@@ -86,6 +87,6 @@ export class UpravljanjeVozilimaPage implements OnInit {
     this.isModalOpen = false;
     this.isEditMode = false;
     this.currentVehicleId = null;
-    this.newVehicle = { brand: '', model: '', year: 2024, transmission: 'manual', category: 'Economy', isAvailable: true };
+    this.newVehicle = { brand: '', model: '', year: 2024, transmission: 'manual', category: 'Economy', imageUrl: '',isAvailable: true };
   }
 }
