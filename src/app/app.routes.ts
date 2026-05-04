@@ -33,5 +33,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/upravljanje-rezervacijama/upravljanje-rezervacijama.page').then(m => m.UpravljanjeRezervacijamaPage),
     canActivate: [authGuard],
     data: { role: 'admin' } // Samo admin
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage),
+    // canActivate: [authGuard]
   }
+
 ];
