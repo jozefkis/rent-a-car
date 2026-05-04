@@ -40,6 +40,8 @@ import {
   carSharp,
   documentOutline,
   documentSharp,
+  homeOutline,
+  homeSharp
 } from 'ionicons/icons';
 import { AuthService } from './core/services/auth.service';
 
@@ -67,6 +69,7 @@ import { AuthService } from './core/services/auth.service';
 })
 export class AppComponent {
   public appPages = [
+    { title: 'Home', url: '/home', icon: 'home', onlyAdmin: false  },
     {
       title: 'Upravljanje nalozima',
       url: '/upravljanje-nalozima',
@@ -85,11 +88,9 @@ export class AppComponent {
       icon: 'document',
       onlyAdmin: true,
     },
-    { title: 'Home', url: '/home', icon: 'home', onlyAdmin: false  },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-
-  // Dodajemo servise u constructor
+  
   constructor(
     private router: Router,
     private menuCtrl: MenuController,
@@ -118,6 +119,8 @@ export class AppComponent {
       carSharp,
       documentOutline,
       documentSharp,
+      homeOutline,
+      homeSharp
     });
   }
 

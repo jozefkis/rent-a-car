@@ -16,24 +16,28 @@
   <ion-card class="form-card">
     <ion-item lines="none">
       <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
-      <ion-input label="Ime" labelPlacement="floating" [(ngModel)]="newUser.firstName" placeholder="Unesite ime"></ion-input>
+      <ion-input label="Ime" labelPlacement="floating" [(ngModel)]="newUser.firstName"
+        placeholder="Unesite ime"></ion-input>
     </ion-item>
-    
+
     <ion-item lines="none">
       <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
-      <ion-input label="Prezime" labelPlacement="floating" [(ngModel)]="newUser.lastName" placeholder="Unesite prezime"></ion-input>
+      <ion-input label="Prezime" labelPlacement="floating" [(ngModel)]="newUser.lastName"
+        placeholder="Unesite prezime"></ion-input>
     </ion-item>
   </ion-card>
 
   <ion-card class="form-card">
     <ion-item lines="none">
       <ion-icon name="card-outline" slot="start" color="secondary"></ion-icon>
-      <ion-input label="Broj lične karte" labelPlacement="floating" [(ngModel)]="newUser.idCardNumber" placeholder="9 cifara"></ion-input>
+      <ion-input label="Broj lične karte" labelPlacement="floating" [(ngModel)]="newUser.idCardNumber"
+        placeholder="9 cifara"></ion-input>
     </ion-item>
-    
+
     <ion-item lines="none">
       <ion-icon name="document-text-outline" slot="start" color="secondary"></ion-icon>
-      <ion-input label="Broj pasoša" labelPlacement="floating" [(ngModel)]="newUser.passportNumber" placeholder="9 cifara"></ion-input>
+      <ion-input label="Broj pasoša" labelPlacement="floating" [(ngModel)]="newUser.passportNumber"
+        placeholder="9 cifara"></ion-input>
     </ion-item>
   </ion-card>
 
@@ -42,15 +46,17 @@
       <ion-icon name="at-outline" slot="start" color="tertiary"></ion-icon>
       <ion-input label="Korisničko ime" labelPlacement="floating" [(ngModel)]="newUser.username"></ion-input>
     </ion-item>
-    
+
     <ion-item lines="none">
       <ion-icon name="lock-closed-outline" slot="start" color="tertiary"></ion-icon>
-      <ion-input label="Lozinka" labelPlacement="floating" type="password" [(ngModel)]="newUser.password"></ion-input>
+      <ion-input label="Lozinka" labelPlacement="floating" type="password" [(ngModel)]="newUser.password">
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle></ion-input>
     </ion-item>
-    
+
     <ion-item lines="none">
       <ion-icon name="checkmark-circle-outline" slot="start" color="tertiary"></ion-icon>
-      <ion-input label="Potvrdi lozinku" labelPlacement="floating" type="password" [(ngModel)]="confirmPassword"></ion-input>
+      <ion-input label="Potvrdi lozinku" labelPlacement="floating" type="password" [(ngModel)]="confirmPassword">
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle></ion-input>
     </ion-item>
   </ion-card>
 
