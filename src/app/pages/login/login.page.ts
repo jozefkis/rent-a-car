@@ -55,7 +55,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     // Ako je neko već ulogovan, odmah ga baci na početnu
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/home']); // Promenjeno na /home jer si tamo radio refaktor
+      this.router.navigate(['/home']);
     }
   }
 
@@ -71,10 +71,12 @@ export class LoginPage implements OnInit {
         if (user) {
           // 2. Provera lozinke (u bazi je user.password)
           if (user.password === this.password) {
-            console.log('Login uspešan!', user);
+            console.log('Login uspešan!', user.id, user.firstName, user.lastName);
 
             // 3. Sačuvaj sesiju u AuthService
             this.authService.setCurrentUser(user);
+            this.username = '';
+            this.password = '';
 
             // 4. Omogući side menu i prebaci na glavnu stranu
             this.menuCtrl.enable(true);

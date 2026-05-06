@@ -49,13 +49,13 @@
 
     <ion-item lines="none">
       <ion-icon name="lock-closed-outline" slot="start" color="tertiary"></ion-icon>
-      <ion-input label="Lozinka" labelPlacement="floating" type="password" [(ngModel)]="newUser.password">
+      <ion-input placeholder="Lozinka" type="password" [(ngModel)]="newUser.password">
         <ion-input-password-toggle slot="end"></ion-input-password-toggle></ion-input>
     </ion-item>
 
     <ion-item lines="none">
       <ion-icon name="checkmark-circle-outline" slot="start" color="tertiary"></ion-icon>
-      <ion-input label="Potvrdi lozinku" labelPlacement="floating" type="password" [(ngModel)]="confirmPassword">
+      <ion-input placeholder="Potvrdi lozinku" type="password" [(ngModel)]="confirmPassword">
         <ion-input-password-toggle slot="end"></ion-input-password-toggle></ion-input>
     </ion-item>
   </ion-card>

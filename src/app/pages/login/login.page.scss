@@ -9,10 +9,10 @@ ion-content {
 }
 
 .main-title {
-  color: #0055ff; // Plava boja sa tvoje slike
   font-weight: 800;
   font-size: 2.2rem;
   margin-bottom: 5px;
+  color: var(--ion-color-primary);
 }
 
 .subtitle {
@@ -22,7 +22,7 @@ ion-content {
 }
 
 .auth-card {
-  background: white;
+  background: var(--ion-color-step-600);
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   padding: 10px 15px;
@@ -36,18 +36,16 @@ ion-content {
   margin-bottom: 10px; // Malo više prostora između polja
 
   ion-icon {
-    margin-top: 12px; // Centriranje ikonice u odnosu na floating label
+    margin-top: 12px;
     font-size: 1.4rem;
   }
 
-  // Ukloni stare ion-label stilove ako su pravili smetnje
   ion-input {
     --highlight-color-focused: #0055ff; // Boja linije kada je polje aktivno
   }
 }
 
 .main-btn {
-  --background: #0055ff; // Plava boja sa dugmeta na slici
   --box-shadow: 0 8px 15px rgba(0, 85, 255, 0.2);
   height: 56px;
   font-weight: 700;
@@ -56,11 +54,12 @@ ion-content {
 
 .footer-section {
   margin-top: 40px;
+
   p {
     color: #666;
   }
+
   .link {
-    color: #0055ff;
     font-weight: 700;
     cursor: pointer;
   }
