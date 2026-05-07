@@ -17,6 +17,7 @@ import {
   MenuController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
+import { CommonModule } from '@angular/common';
 import {
   mailOutline,
   mailSharp,
@@ -65,6 +66,7 @@ import { AuthService } from './core/services/auth.service';
     IonLabel,
     IonRouterLink,
     IonRouterOutlet,
+    CommonModule,
   ],
 })
 export class AppComponent {
@@ -94,7 +96,7 @@ export class AppComponent {
   constructor(
     private router: Router,
     private menuCtrl: MenuController,
-    private authService: AuthService,
+    public authService: AuthService,
   ) {
     addIcons({
       mailOutline,

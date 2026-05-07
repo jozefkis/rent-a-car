@@ -4,7 +4,7 @@
       <ion-content>
         <ion-list id="inbox-list">
           <ion-list-header>Rent-a-Car</ion-list-header>
-          <ion-note>Korisnički panel</ion-note>
+          <ion-note *ngIf="authService.currentUser$ | async as user">{{ user.firstName }} {{ user.lastName }}</ion-note>
 
           @for (p of appPages; track p.title) {
             @if (shouldShowPage(p)) {
