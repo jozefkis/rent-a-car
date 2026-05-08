@@ -70,7 +70,7 @@ export class DataService {
   }
 
   updateUser(id: string, user: User): Observable<any> {
-    return this.http.put(`${this.baseUrl}users/${id}.json`, user);
+    return this.http.patch(`${this.baseUrl}users/${id}.json`, user);
   }
 
   deleteUser(id: string): Observable<any> {

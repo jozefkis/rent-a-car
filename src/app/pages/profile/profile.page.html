@@ -1,0 +1,103 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Moj Profil</ion-title>
+
+    <ion-buttons slot="end" *ngIf="!isEditMode">
+      <ion-button (click)="toggleEdit()" color="primary">
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Izmeni
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="header-section">
+    <h1>{{ user?.firstName }} {{ user?.lastName }}</h1>
+    <p>Pregledajte ili izmenite svoje podatke</p>
+  </div>
+
+  <ion-card class="form-card" [class.editable-card]="isEditMode">
+    <ion-item lines="none" [class.disabled-item]="!isEditMode">
+      <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+      <ion-input 
+        label="Ime" 
+        labelPlacement="floating" 
+        [(ngModel)]="tempUser.firstName" 
+        [readonly]="!isEditMode">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none" [class.disabled-item]="!isEditMode">
+      <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+      <ion-input 
+        label="Prezime" 
+        labelPlacement="floating" 
+        [(ngModel)]="tempUser.lastName" 
+        [readonly]="!isEditMode">
+      </ion-input>
+    </ion-item>
+  </ion-card>
+
+  <ion-card class="form-card" [class.editable-card]="isEditMode">
+    <ion-item lines="none" [class.disabled-item]="!isEditMode">
+      <ion-icon name="card-outline" slot="start" color="secondary"></ion-icon>
+      <ion-input 
+        label="Broj lične karte" 
+        labelPlacement="floating" 
+        [(ngModel)]="tempUser.idCardNumber" 
+        [readonly]="!isEditMode">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none" [class.disabled-item]="!isEditMode">
+      <ion-icon name="document-text-outline" slot="start" color="secondary"></ion-icon>
+      <ion-input 
+        label="Broj pasoša" 
+        labelPlacement="floating" 
+        [(ngModel)]="tempUser.passportNumber" 
+        [readonly]="!isEditMode">
+      </ion-input>
+    </ion-item>
+  </ion-card>
+
+  <ion-card class="form-card" [class.editable-card]="isEditMode">
+    <ion-item lines="none" [class.disabled-item]="!isEditMode">
+      <ion-icon name="at-outline" slot="start" color="tertiary"></ion-icon>
+      <ion-input 
+        label="Korisničko ime" 
+        labelPlacement="floating" 
+        [(ngModel)]="tempUser.username" 
+        [readonly]="!isEditMode">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none" [class.disabled-item]="!isEditMode">
+      <ion-icon name="lock-closed-outline" slot="start" color="tertiary"></ion-icon>
+      <ion-input 
+        label="Lozinka" 
+        labelPlacement="floating" 
+        type="password" 
+        [(ngModel)]="tempUser.password" 
+        [readonly]="!isEditMode">
+        <ion-input-password-toggle slot="end" *ngIf="isEditMode"></ion-input-password-toggle>
+      </ion-input>
+    </ion-item>
+  </ion-card>
+
+  <div class="ion-padding" *ngIf="isEditMode">
+    <ion-button expand="block" (click)="saveChanges()" class="main-btn">
+      <ion-icon slot="start" name="save-outline"></ion-icon>
+      Sačuvaj izmene
+    </ion-button>
+    
+    <ion-button expand="block" fill="clear" color="medium" (click)="cancelEdit()">
+      <ion-icon slot="start" name="close-outline"></ion-icon>
+      Otkaži
+    </ion-button>
+  </div>
+</ion-content>

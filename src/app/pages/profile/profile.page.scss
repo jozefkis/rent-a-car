@@ -1,0 +1,84 @@
+// Header sekcija sa naslovom i opisom
+.header-section {
+  text-align: center;
+  margin: 20px 0;
+  
+  h1 {
+    font-weight: 800;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    color: var(--ion-color-primary);
+  }
+  
+  p {
+    color: var(--ion-color-step-600);
+    font-size: 0.9rem;
+  }
+}
+
+// Stilovi za kartice (grupe polja)
+.form-card {
+  border-radius: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--ion-color-step-50);
+  transition: all 0.3s ease;
+  border: 1px solid transparent; // Rezervisano mesto za border u edit modu
+
+  ion-item {
+    --padding-start: 15px;
+    --inner-padding-end: 15px;
+    --background: transparent;
+    margin-bottom: 5px;
+    
+    // UKLANJANJE PLAVOG BORDERA NA FOKUSU
+    --highlight-color-focused: transparent !important;
+    --highlight-color-valid: transparent !important;
+    --highlight-color-invalid: transparent !important;
+    --show-full-highlight: 0;
+    --show-revert-highlight: 0;
+
+    ion-icon {
+      margin-right: 12px;
+      font-size: 20px;
+      // Poravnanje ikonica sa tekstom (floating label zna da ih povuče gore)
+      margin-top: 12px; 
+    }
+  }
+}
+
+// KLJUČNO: Klasa koja potpuno zaključava polje (nema klika, nema fokusa)
+.disabled-item {
+  pointer-events: none; // Onemogućava bilo kakav dodir/klik
+  opacity: 0.7;         // Vizuelno pokazuje da je polje neaktivno
+  filter: grayscale(0.5); // Blago ispere boje ikonica
+}
+
+// Stil kartice kada je Edit Mode aktivan
+.editable-card {
+  border: 1px solid var(--ion-color-primary) !important; 
+  box-shadow: none !important;
+}
+
+// Glavno dugme (Sačuvaj)
+.main-btn {
+  --border-radius: 12px;
+  --box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
+  height: 52px;
+  font-weight: 600;
+  margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Sekcija za akcije (padding za dugmiće)
+.ion-padding {
+  ion-button {
+    margin-bottom: 5px;
+  }
+}
+
+// Fix za input-password-toggle da se lepo vidi u dark mode-u
+ion-input-password-toggle {
+  color: var(--ion-color-medium);
+}
