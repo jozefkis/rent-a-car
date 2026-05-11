@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, 
-  IonMenuButton, IonCard, IonItem, IonIcon, IonLabel, 
+import {
+  IonHeader, IonToolbar, IonTitle, IonContent, IonButtons,
+  IonMenuButton, IonCard, IonItem, IonIcon, IonLabel,
   IonBadge, IonButton, IonCardContent, IonSpinner
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { 
-  carOutline, calendarOutline, cashOutline, 
-  calendarClearOutline, alertCircleOutline 
+import {
+  carOutline, calendarOutline, cashOutline,
+  calendarClearOutline, alertCircleOutline
 } from 'ionicons/icons';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DataService } from 'src/app/core/services/data.service';
+import { forkJoin, map, switchMap, of } from 'rxjs';
 
 @Component({
   selector: 'app-my-reservations',
@@ -20,14 +21,14 @@ import { DataService } from 'src/app/core/services/data.service';
   styleUrls: ['./my-reservations.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
-    IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, 
-    IonMenuButton, IonCard, IonItem, IonIcon, IonLabel, 
+    CommonModule,
+    IonHeader, IonToolbar, IonTitle, IonContent, IonButtons,
+    IonMenuButton, IonCard, IonItem, IonIcon, IonLabel,
     IonBadge, IonButton, IonCardContent
   ]
 })
 export class MyReservationsPage implements OnInit {
-  
+
   reservations: any[] = [];
   isLoading: boolean = true;
   user: any = null;
@@ -37,12 +38,12 @@ export class MyReservationsPage implements OnInit {
     private authService: AuthService
   ) {
     // Registracija ikonica
-    addIcons({ 
-      carOutline, 
-      calendarOutline, 
-      cashOutline, 
+    addIcons({
+      carOutline,
+      calendarOutline,
+      cashOutline,
       calendarClearOutline,
-      alertCircleOutline 
+      alertCircleOutline
     });
   }
 
@@ -69,21 +70,41 @@ export class MyReservationsPage implements OnInit {
   // 2. Povlačimo rezervacije iz baze filtrirane po User ID-u
   fetchReservations(userId: string) {
     this.isLoading = true;
-    this.dataService.getReservationsByUserId(userId).subscribe({
-      next: (data) => {
-        // Firebase vraća objekat, pa ga pretvaramo u niz za *ngFor
-        if (data) {
-          this.reservations = Object.keys(data).map(key => ({
-            id: key,
-            ...data[key]
-          }));
-        } else {
-          this.reservations = [];
-        }
+
+    this.dataService.getReservationsByUserId(userId).pipe(
+      switchMap((reservationsObj: any) => {
+        if (!reservationsObj) return of([]);
+
+        // Pretvaramo objekat u niz
+        const reservationsArray = Object.keys(reservationsObj).map(key => ({
+          id: key,
+          ...reservationsObj[key]
+        }));
+
+        // Za svaku rezervaciju kreiramo poziv ka bazi za detalje o vozilu
+        const detailedReservationsObs = reservationsArray.map(res =>
+          this.dataService.getVehicleById(res.vehicleId).pipe(
+            map(vehicle => {
+              // "Lepimo" podatke o vozilu direktno na rezervaciju
+              return {
+                ...res,
+                carModel: vehicle?.model || 'Nepoznat model',
+                carBrand: vehicle?.brand || 'Nepoznata marka'
+              };
+            })
+          )
+        );
+
+        // forkJoin čeka da se završe SVI HTTP pozivi za vozila
+        return forkJoin(detailedReservationsObs);
+      })
+    ).subscribe({
+      next: (fullData) => {
+        this.reservations = fullData;
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Greška pri učitavanju rezervacija:', err);
+        console.error('Greška pri spajanju podataka:', err);
         this.isLoading = false;
       }
     });

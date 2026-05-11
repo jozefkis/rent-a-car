@@ -17,8 +17,8 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  // --- VOZILA (CRUD) ---
-  
+  // --- VOZILA ---
+
   addVehicle(vehicle: Vehicle): Observable<any> {
     return this.http.post(`${this.baseUrl}vehicles.json`, vehicle);
   }
@@ -41,6 +41,10 @@ export class DataService {
 
   deleteVehicle(id: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}vehicles/${id}.json`);
+  }
+
+  getVehicleById(id: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}vehicles/${id}.json`);
   }
 
   // --- KORISNICI (Auth & Management) ---
