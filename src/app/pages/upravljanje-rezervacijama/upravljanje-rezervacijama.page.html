@@ -67,6 +67,22 @@
           <span style="font-weight: 600; color: var(--ion-text-color); font-size: 0.9rem;">{{ r.endDate | date:'dd. MMM yyyy' }}</span>
         </div>
       </div>
+
+      <div *ngIf="r.status === 'active'" style="margin-top: 15px;">
+        <ion-button 
+          (click)="zavrsiRezervaciju(r.id)" 
+          expand="block" 
+          fill="outline" 
+          color="success" 
+          style="--border-radius: 12px; font-weight: 700; --border-width: 2px; margin-top: 10px;">
+          <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+          Završi
+        </ion-button>
+      </div>
+
+    </div> <div *ngIf="rezervacije.length === 0" class="ion-text-center" style="margin-top: 50px; color: var(--ion-color-step-400);">
+      <ion-icon name="document-text-outline" style="font-size: 4rem; opacity: 0.3;"></ion-icon>
+      <p>Nema zabeleženih rezervacija.</p>
     </div>
 
   </div>
