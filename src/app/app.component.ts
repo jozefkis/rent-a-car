@@ -15,6 +15,7 @@ import {
   IonRouterOutlet,
   IonRouterLink,
   MenuController,
+  LoadingController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { CommonModule } from '@angular/common';
@@ -73,8 +74,8 @@ import { AuthService } from './core/services/auth.service';
 })
 export class AppComponent {
   public appPages = [
-    { title: 'Početna', url: '/home', icon: 'home', onlyAdmin: false  },
-    { title: 'Moj profil', url: '/profile', icon: 'person', onlyAdmin: false  },
+    { title: 'Početna', url: '/home', icon: 'home', onlyAdmin: false },
+    { title: 'Moj profil', url: '/profile', icon: 'person', onlyAdmin: false },
     {
       title: 'Upravljanje nalozima',
       url: '/upravljanje-nalozima',
@@ -95,11 +96,12 @@ export class AppComponent {
     },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  
+
   constructor(
     private router: Router,
     private menuCtrl: MenuController,
     public authService: AuthService,
+    private loadingCtrl: LoadingController,
   ) {
     addIcons({
       mailOutline,
@@ -137,9 +139,24 @@ export class AppComponent {
   }
 
   // Funkcija za odjavu
-  logout() {
+  async logout() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Odjavljivanje...',
+      duration: 800, // Kratak duration kao fallback
+      spinner: 'circles',
+      cssClass: 'custom-loading'
+    });
+    await loading.present();
+
+    await this.menuCtrl.close();
+    await this.menuCtrl.enable(false);
+
     this.authService.logout();
-    this.menuCtrl.enable(false);
+
+    setTimeout(async () => {
+      await loading.dismiss();
+      this.router.navigate(['/login'], { replaceUrl: true });
+    }, 500);
   }
 
   shouldShowPage(page: any) {

@@ -7,7 +7,7 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class AuthService {
-  
+
   // 1. BehaviorSubject čuva trenutno stanje korisnika.
   // Inicijalno pokušava da pročita 'loggedUser' iz localStorage-a.
   private currentUserSubject = new BehaviorSubject<User | null>(
@@ -54,17 +54,8 @@ export class AuthService {
    * Kompletna odjava: čišćenje memorije, storage-a i preusmeravanje
    */
   logout(): void {
-    // 1. Čistimo sav storage
-    localStorage.removeItem('loggedUser');
-    localStorage.clear();
-
-    // 2. Javljamo BehaviorSubject-u da je korisnik sada NULL
-    // Ovo odmah menja rezultat funkcije isLoggedIn() na false
+    localStorage.clear(); // Briše sve odjednom
     this.currentUserSubject.next(null);
-
-    // 3. Prebacujemo na login uz "replaceUrl" da se ne bi mogao vratiti nazad na "back"
-    this.router.navigate(['/login'], { replaceUrl: true });
-    
-    console.log('Korisnik uspešno odjavljen.');
+    console.log('Podaci očišćeni.');
   }
 }

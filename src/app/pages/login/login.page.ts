@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import {
-  IonItem, IonLabel, IonInput,
+  IonItem, IonInput,
   IonButton, IonIcon, MenuController,
-  IonInputPasswordToggle, IonHeader, IonToolbar,
-  IonButtons, IonBackButton, IonTitle
+  IonInputPasswordToggle, LoadingController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logInOutline, carSport, arrowForwardOutline, atOutline, lockClosedOutline } from 'ionicons/icons';
@@ -40,7 +39,8 @@ export class LoginPage implements OnInit {
     private dataService: DataService,
     private authService: AuthService,
     private router: Router,
-    private menuCtrl: MenuController // Za uključivanje menija nakon logina
+    private menuCtrl: MenuController,
+    private loadingCtrl: LoadingController
   ) {
     addIcons({ logInOutline, carSport, arrowForwardOutline, atOutline, lockClosedOutline });
   }
@@ -52,39 +52,53 @@ export class LoginPage implements OnInit {
     }
   }
 
-  onLogin() {
-    if (!this.username || !this.password) {
-      alert('Unesite korisničko ime i lozinku.');
-      return;
-    }
-
-    // 1. Provera korisnika u bazi
-    this.dataService.getUserByUsername(this.username).subscribe({
-      next: (user) => {
-        if (user) {
-          // 2. Provera lozinke (u bazi je user.password)
-          if (user.password === this.password) {
-            console.log('Login uspešan!', user.id, user.firstName, user.lastName);
-
-            // 3. Sačuvaj sesiju u AuthService
-            this.authService.setCurrentUser(user);
-            this.username = '';
-            this.password = '';
-
-            // 4. Omogući side menu i prebaci na glavnu stranu
-            this.menuCtrl.enable(true);
-            this.router.navigate(['/home']);
-          } else {
-            alert('Pogrešna lozinka!');
-          }
-        } else {
-          alert('Korisnik sa tim imenom ne postoji.');
-        }
-      },
-      error: (err) => {
-        console.error('Greška pri loginu:', err);
-        alert('Problem sa konekcijom.');
-      }
-    });
+  async onLogin() {
+  if (!this.username || !this.password) {
+    alert('Unesite korisničko ime i lozinku.');
+    return;
   }
+
+  // Kreiramo loading indikator
+  const loading = await this.loadingCtrl.create({
+    message: 'Prijava u toku...',
+    spinner: 'circles',
+    cssClass: 'custom-loading' // Opciono za dodatni stil
+  });
+  
+  // Prikaži loading
+  await loading.present();
+
+  this.dataService.getUserByUsername(this.username).subscribe({
+    next: async (user) => {
+      if (user) {
+        if (user.password === this.password) {
+          console.log('Login uspešan!', user.id);
+
+          this.authService.setCurrentUser(user);
+          this.username = '';
+          this.password = '';
+          this.menuCtrl.enable(true);
+
+          // Mali delay da bi tranzicija bila smooth
+          setTimeout(async () => {
+            await loading.dismiss();
+            this.router.navigate(['/home'], { replaceUrl: true });
+          }, 600);
+
+        } else {
+          await loading.dismiss();
+          alert('Pogrešna lozinka!');
+        }
+      } else {
+        await loading.dismiss();
+        alert('Korisnik sa tim imenom ne postoji.');
+      }
+    },
+    error: async (err) => {
+      console.error('Greška pri loginu:', err);
+      await loading.dismiss();
+      alert('Problem sa konekcijom.');
+    }
+  });
+}
 }
