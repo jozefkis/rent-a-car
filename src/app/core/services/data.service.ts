@@ -97,6 +97,10 @@ export class DataService {
     return this.http.delete(`${this.baseUrl}reservations/${id}.json`);
   }
 
+  getReservationsByUserId(id: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}reservations.json?orderBy="userId"&equalTo="${id}"`);
+  }
+
   // --- POMOĆNA METODA ---
   // Pretvara Firebase-ov čudni objekat { "ID1": {podaci}, "ID2": {podaci} } u niz [{...podaci, id: "ID1"}]
   private transformFirebaseData(res: any): any[] {

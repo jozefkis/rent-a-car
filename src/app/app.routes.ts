@@ -44,5 +44,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/profile/profile.page').then( m => m.ProfilePage),
     canActivate: [authGuard]
   },
+  {
+    path: 'my-reservations',
+    loadComponent: () => import('./pages/my-reservations/my-reservations.page').then( m => m.MyReservationsPage),
+    canActivate: [authGuard]
+  },
+
 
 ];

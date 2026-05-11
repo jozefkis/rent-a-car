@@ -45,7 +45,10 @@ import {
   homeOutline,
   homeSharp,
   peopleSharp,
-  peopleOutline
+  peopleOutline,
+  documentsOutline,
+  documents,
+  documentsSharp
 } from 'ionicons/icons';
 import { AuthService } from './core/services/auth.service';
 
@@ -76,6 +79,8 @@ export class AppComponent {
   public appPages = [
     { title: 'Početna', url: '/home', icon: 'home', onlyAdmin: false },
     { title: 'Moj profil', url: '/profile', icon: 'person', onlyAdmin: false },
+    { title: 'Moje rezervacije', url: '/my-reservations', icon: 'documents', onlyAdmin: false },
+
     {
       title: 'Upravljanje nalozima',
       url: '/upravljanje-nalozima',
@@ -129,7 +134,10 @@ export class AppComponent {
       homeOutline,
       homeSharp,
       peopleSharp,
-      peopleOutline
+      peopleOutline,
+      documentsOutline,
+      documents,
+      documentsSharp
     });
   }
 

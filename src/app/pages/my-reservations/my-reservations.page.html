@@ -1,0 +1,55 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Moje Rezervacije</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="header-section">
+    <h1>Istorija najma</h1>
+    <p>Pregledajte vaše trenutne i prošle rezervacije</p>
+  </div>
+
+  <div *ngIf="reservations.length > 0; else noData">
+    <ion-card class="form-card reservation-card" *ngFor="let res of reservations">
+      
+      <ion-item lines="none" class="reservation-header">
+        <ion-icon name="car-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h2>{{ res.carModel }}</h2>
+          <p>{{ res.carBrand }}</p>
+        </ion-label>
+        <ion-badge [color]="getStatusColor(res.status)" slot="end">
+          {{ res.status }}
+        </ion-badge>
+      </ion-item>
+
+      <ion-card-content>
+        <div class="detail-row">
+          <ion-icon name="calendar-outline" color="secondary"></ion-icon>
+          <span>{{ res.startDate | date:'dd.MM.yyyy' }} - {{ res.endDate | date:'dd.MM.yyyy' }}</span>
+        </div>
+
+        <div class="detail-row">
+          <ion-icon name="cash-outline" color="tertiary"></ion-icon>
+          <span class="price-text">{{ res.totalPrice }} EUR</span>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ng-template #noData>
+    <div class="empty-state ion-text-center">
+      <ion-icon name="calendar-clear-outline"></ion-icon>
+      <h3>Nemate rezervacija</h3>
+      <p>Trenutno nemate zakazanih termina za iznajmljivanje.</p>
+      <ion-button expand="block" shape="round" class="main-btn" routerLink="/home">
+        REZERVIŠI AUTO
+      </ion-button>
+    </div>
+  </ng-template>
+</ion-content>
