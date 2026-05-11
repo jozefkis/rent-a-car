@@ -1,22 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
   IonItem,
-  IonLabel,
   IonInput,
   IonInputPasswordToggle,
   IonButton,
   IonIcon,
   IonButtons,
-  IonList,
-  IonListHeader,
-  IonText,
   IonBackButton,
   IonCard
 } from '@ionic/angular/standalone';
@@ -42,21 +38,16 @@ import { User } from '../../core/models/user.model';
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
     IonItem,
-    IonLabel,
     IonInput,
     IonInputPasswordToggle,
     IonButton,
     IonIcon,
     IonButtons,
-    IonList,
-    IonListHeader,
-    IonText,
     IonBackButton,
     IonCard
   ],

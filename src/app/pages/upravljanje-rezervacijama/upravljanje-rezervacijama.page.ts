@@ -8,19 +8,8 @@ import {
   IonToolbar, 
   IonButtons, 
   IonMenuButton, 
-  IonList, 
-  IonItem, 
-  IonLabel, 
-  IonBadge, 
-  IonThumbnail, 
   IonSpinner, 
   IonIcon, 
-  IonCard, 
-  IonCardContent, 
-  IonButton,
-  IonGrid,
-  IonRow,
-  IonCol 
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { calendarOutline, carOutline, personOutline } from 'ionicons/icons';
@@ -44,19 +33,8 @@ import { Vehicle } from '../../core/models/vehicle.model';
     IonToolbar, 
     IonButtons, 
     IonMenuButton,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonBadge,
-    IonThumbnail,
     IonSpinner,
     IonIcon,
-    IonCard,
-    IonCardContent,
-    IonButton,
-    IonGrid,
-    IonRow,
-    IonCol
   ]
 })
 export class UpravljanjeRezervacijamaPage implements OnInit {

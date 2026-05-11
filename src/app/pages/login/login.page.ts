@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import {
-  IonContent, IonItem, IonLabel, IonInput,
+  IonItem, IonLabel, IonInput,
   IonButton, IonIcon, MenuController,
   IonInputPasswordToggle, IonHeader, IonToolbar,
   IonButtons, IonBackButton, IonTitle
@@ -24,18 +24,11 @@ import { AuthService } from '../../core/services/auth.service';
     CommonModule,
     FormsModule,
     RouterLink,
-    IonContent,
     IonItem,
-    IonLabel,
     IonInput,
     IonButton,
     IonIcon,
     IonInputPasswordToggle,
-    IonHeader,
-    IonToolbar,
-    IonButtons,
-    IonBackButton,
-    IonTitle
   ]
 })
 export class LoginPage implements OnInit {

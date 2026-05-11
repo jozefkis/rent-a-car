@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonMenuButton,
-  IonList, IonItem, IonLabel, IonBadge, IonSpinner, IonButton, IonIcon, 
+  IonList, IonItem, IonLabel, IonBadge, IonButton, IonIcon, 
   IonModal, IonInput, IonSelect, IonSelectOption, IonItemSliding, 
   IonItemOptions, IonItemOption, AlertController 
 } from '@ionic/angular/standalone';
@@ -18,8 +18,7 @@ import { DataService } from '../../core/services/data.service';
   standalone: true,
   imports: [
     CommonModule, FormsModule, IonContent, IonHeader, IonTitle, IonToolbar, 
-    IonButtons, IonMenuButton, IonList, IonItem, IonLabel, IonBadge, 
-    IonSpinner, IonButton, IonIcon, IonModal, IonInput, IonSelect, 
+    IonButtons, IonMenuButton, IonList, IonItem, IonLabel, IonBadge,  IonButton, IonIcon, IonModal, IonInput, IonSelect, 
     IonSelectOption, IonItemSliding, IonItemOptions, IonItemOption
   ]
 })
