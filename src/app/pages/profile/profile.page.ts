@@ -82,19 +82,19 @@ export class ProfilePage implements OnInit {
     this.authService.currentUser$.subscribe((data) => {
       if (data) {
         this.user = data;
-        this.tempUser = { ...data }; // Inicijalna kopija
+        this.tempUser = { ...data }; 
       }
     });
   }
 
   toggleEdit() {
     this.isEditMode = true;
-    this.tempUser = { ...this.user }; // Resetujemo kopiju na trenutno stanje baze pre izmene
+    this.tempUser = { ...this.user }; 
   }
 
   cancelEdit() {
     this.isEditMode = false;
-    this.tempUser = { ...this.user }; // Odbacujemo sve što je kucano
+    this.tempUser = { ...this.user };
   }
 
   async saveChanges() {
@@ -105,7 +105,6 @@ export class ProfilePage implements OnInit {
 
     this.dataService.updateUser(this.user.id, this.tempUser).subscribe({
       next: (res) => {
-        // Kada baza potvrdi, tek tada sinhronizujemo lokalno stanje
         this.user = { ...this.tempUser };
         this.authService.setCurrentUser(this.user);
         this.isEditMode = false;

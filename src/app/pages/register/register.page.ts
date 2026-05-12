@@ -53,15 +53,14 @@ import { User } from '../../core/models/user.model';
   ],
 })
 export class RegisterPage implements OnInit {
-  // Objekat koji šaljemo u bazu
   newUser: User = {
     firstName: '',
     lastName: '',
     username: '',
     password: '',
-    idCardNumber: '', // Broj lične karte
-    passportNumber: '', // Broj pasoša
-    role: 'customer', // Automatski dodeljena uloga
+    idCardNumber: '', 
+    passportNumber: '', 
+    role: 'customer', 
   };
 
   confirmPassword = '';
@@ -70,7 +69,6 @@ export class RegisterPage implements OnInit {
     private dataService: DataService,
     private router: Router,
   ) {
-    // Registracija ikonica koje koristimo u HTML-u
     addIcons({
       personOutline,
       cardOutline,
@@ -84,7 +82,6 @@ export class RegisterPage implements OnInit {
   ngOnInit() {}
 
   onRegister() {
-    // 1. Provera da li su sva polja popunjena
     if (
       !this.newUser.firstName ||
       !this.newUser.lastName ||
@@ -97,19 +94,16 @@ export class RegisterPage implements OnInit {
       return;
     }
 
-    // 2. Provera da li se lozinke podudaraju
     if (this.newUser.password !== this.confirmPassword) {
       alert('Lozinke se ne podudaraju!');
       return;
     }
 
-    // 3. Provera da li korisničko ime već postoji
     this.dataService.getUserByUsername(this.newUser.username).subscribe({
       next: (existingUser) => {
         if (existingUser) {
           alert('Korisničko ime je već zauzeto. Izaberite drugo.');
         } else {
-          // 4. Ako je sve u redu, šaljemo podatke servisu
           this.dataService.addUser(this.newUser).subscribe({
             next: () => {
               alert('Uspešno ste se registrovali!');

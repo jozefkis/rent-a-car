@@ -158,7 +158,6 @@ export class HomePage implements OnInit, OnDestroy {
     this.ucitajVozila();
   }
 
-  // KLJUČNO: Osvežava podatke svaki put kada se stranica ponovo pojavi na ekranu
   ionViewWillEnter() {
     this.ucitajVozila();
   }
@@ -171,7 +170,6 @@ export class HomePage implements OnInit, OnDestroy {
 
   ucitajVozila() {
     this.isLoading = true;
-    // Koristimo tvoju novu funkciju koja vraća samo dostupna vozila
     this.vehicleSub = this.dataService.getAvailableVehicles().subscribe({
       next: (data) => {
         this.allVehicles = data;
@@ -185,7 +183,6 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  // --- LOGIKA ZA KALENDAR ---
 
   onRangeChange() {
     if (!this.dateRange?.from || !this.dateRange?.to) return;
@@ -239,7 +236,6 @@ export class HomePage implements OnInit, OnDestroy {
     );
   }
 
-  // --- FILTERI I PRETRAGA ---
 
   applyFilters() {
     this.vozila = this.allVehicles.filter((auto) => {
@@ -281,7 +277,6 @@ export class HomePage implements OnInit, OnDestroy {
     );
   }
 
-  // --- RAD SA MODALIMA ---
 
   prikaziDetalje(auto: Vehicle) {
     this.selectedAuto = { ...auto };
@@ -338,7 +333,6 @@ export class HomePage implements OnInit, OnDestroy {
         await toast.present();
         this.isModalOpen = false;
         
-        // OSVEŽAVANJE: Odmah povuci nove podatke u slučaju da je status vozila promenjen
         this.ucitajVozila();
       },
       error: (err) => console.error('Greška pri rezervaciji:', err),

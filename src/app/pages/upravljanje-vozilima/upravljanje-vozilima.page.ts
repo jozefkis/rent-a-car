@@ -52,7 +52,6 @@ export class UpravljanjeVozilimaPage implements OnInit {
   }
 
   loadVehicles() {
-    // Ovde koristiš metodu iz servisa koja povlači /vehicle čvor
     this.dbService.getVehicles().subscribe((data: any) => {
       this.vehicles = data;
     });

@@ -65,13 +65,10 @@ export class UpravljanjeRezervacijamaPage implements OnInit {
   ucitajSve() {
     this.isLoading = true;
     
-    // 1. Prvo povlačimo sva vozila da bismo imali njihove nazive i slike
     this.dataService.getVehicles().subscribe((vozila: Vehicle[]) => {
       
-      // 2. Zatim povlačimo sve rezervacije
       this.reservationService.getAllReservations().subscribe((sveRezervacije: Reservation[]) => {
         
-        // 3. Mapiramo (spajamo) podatke
         this.rezervacije = sveRezervacije.map((res: Reservation) => {
           const auto = vozila.find(v => v.id === res.vehicleId);
           return {
@@ -91,11 +88,9 @@ export class UpravljanjeRezervacijamaPage implements OnInit {
 
     console.log('Završavam rezervaciju:', id);
     
-    // Pozivamo servis za ažuriranje statusa na "finished"
     this.reservationService.updateReservationStatus(id, 'finished').subscribe({
       next: () => {
         console.log('Status uspešno ažuriran');
-        // Ponovo učitavamo sve kako bi se promena videla na ekranu (dugme nestalo, tačka posivela)
         this.ucitajSve();
       },
       error: (err) => {

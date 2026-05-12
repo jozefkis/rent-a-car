@@ -31,7 +31,6 @@ import { AuthService } from '../../core/services/auth.service';
   ]
 })
 export class LoginPage implements OnInit {
-  // Varijable za ngModel u HTML-u
   username = '';
   password = '';
 
@@ -46,7 +45,6 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    // Ako je neko već ulogovan, odmah ga baci na početnu
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/home']);
     }
@@ -58,14 +56,12 @@ export class LoginPage implements OnInit {
     return;
   }
 
-  // Kreiramo loading indikator
   const loading = await this.loadingCtrl.create({
     message: 'Prijava u toku...',
     spinner: 'circles',
-    cssClass: 'custom-loading' // Opciono za dodatni stil
+    cssClass: 'custom-loading' 
   });
   
-  // Prikaži loading
   await loading.present();
 
   this.dataService.getUserByUsername(this.username).subscribe({
@@ -79,7 +75,6 @@ export class LoginPage implements OnInit {
           this.password = '';
           this.menuCtrl.enable(true);
 
-          // Mali delay da bi tranzicija bila smooth
           setTimeout(async () => {
             await loading.dismiss();
             this.router.navigate(['/home'], { replaceUrl: true });

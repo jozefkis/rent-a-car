@@ -37,7 +37,6 @@ export class MyReservationsPage implements OnInit {
     private dataService: DataService,
     private authService: AuthService
   ) {
-    // Registracija ikonica
     addIcons({
       carOutline,
       calendarOutline,
@@ -51,7 +50,6 @@ export class MyReservationsPage implements OnInit {
     this.loadUserData();
   }
 
-  // 1. Dobijamo trenutnog korisnika da bismo znali čije rezervacije tražimo
   loadUserData() {
     this.authService.currentUser$.subscribe({
       next: (userData) => {
@@ -67,7 +65,6 @@ export class MyReservationsPage implements OnInit {
     });
   }
 
-  // 2. Povlačimo rezervacije iz baze filtrirane po User ID-u
   fetchReservations(userId: string) {
     this.isLoading = true;
 
@@ -75,17 +72,14 @@ export class MyReservationsPage implements OnInit {
       switchMap((reservationsObj: any) => {
         if (!reservationsObj) return of([]);
 
-        // Pretvaramo objekat u niz
         const reservationsArray = Object.keys(reservationsObj).map(key => ({
           id: key,
           ...reservationsObj[key]
         }));
 
-        // Za svaku rezervaciju kreiramo poziv ka bazi za detalje o vozilu
         const detailedReservationsObs = reservationsArray.map(res =>
           this.dataService.getVehicleById(res.vehicleId).pipe(
             map(vehicle => {
-              // "Lepimo" podatke o vozilu direktno na rezervaciju
               return {
                 ...res,
                 carModel: vehicle?.model || 'Nepoznat model',
@@ -95,7 +89,6 @@ export class MyReservationsPage implements OnInit {
           )
         );
 
-        // forkJoin čeka da se završe SVI HTTP pozivi za vozila
         return forkJoin(detailedReservationsObs);
       })
     ).subscribe({
@@ -110,7 +103,6 @@ export class MyReservationsPage implements OnInit {
     });
   }
 
-  // Pomoćna funkcija za boju statusa
   getStatusColor(status: string): string {
     const s = status?.toLowerCase();
     if (s === 'aktivna' || s === 'active') return 'success';
