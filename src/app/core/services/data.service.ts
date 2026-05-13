@@ -8,6 +8,9 @@ import { environment } from 'src/environments/environment';
 import { Vehicle } from '../models/vehicle.model';
 import { User } from '../models/user.model';
 import { Reservation } from '../models/reservation.model';
+import { AuthService } from './auth.service';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +18,8 @@ import { Reservation } from '../models/reservation.model';
 export class DataService {
   private baseUrl = environment.dbUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService
+  ) { }
 
   // --- VOZILA ---
 
@@ -65,7 +69,7 @@ export class DataService {
     const url = `${this.baseUrl}users.json?orderBy="username"&equalTo="${username}"`;
     return this.http.get<{ [key: string]: User }>(url).pipe(
       map(res => {
-        const keys = Object.keys(res || {});
+        const keys = Object.keys(res || {});    
         if (keys.length === 0) return null;
         // Vraćamo prvog pronađenog korisnika sa njegovim Firebase ID-em
         return { ...res[keys[0]], id: keys[0] };
@@ -73,9 +77,22 @@ export class DataService {
     );
   }
 
+  // updateUser(id: string, user: User): Observable<any> {
+  //   return this.http.patch(`${this.baseUrl}users/${id}.json?auth=${this.token}`, user);
+  // }
+
   updateUser(id: string, user: User): Observable<any> {
-    return this.http.patch(`${this.baseUrl}users/${id}.json`, user);
-  }
+  // 1. Uzmi trenutnog korisnika (u kojem smo sačuvali token)
+  const loggedInUser = this.authService.getLoggedUser();
+  const token = loggedInUser?.token;
+
+  // 2. Dodaj ?auth= na kraj putanje
+  const url = `${this.baseUrl}users/${id}.json?auth=${token}`;
+  
+  console.log('Šaljem PATCH na:', url); // Proveri u konzoli da li se vidi dugacak token
+  
+  return this.http.patch(url, user);
+}
 
   deleteUser(id: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}users/${id}.json`);

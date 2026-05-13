@@ -98,21 +98,34 @@ export class ProfilePage implements OnInit {
   }
 
   async saveChanges() {
-    if (!this.user.id) {
-      console.error('ID korisnika nije pronađen!');
-      return;
-    }
-
-    this.dataService.updateUser(this.user.id, this.tempUser).subscribe({
-      next: (res) => {
-        this.user = { ...this.tempUser };
-        this.authService.setCurrentUser(this.user);
-        this.isEditMode = false;
-        console.log('Profil je uspešno ažuriran u Firebase-u');
-      },
-      error: (err) => {
-        console.error('Greška pri upisu u bazu:', err);
-      },
-    });
+  if (!this.user.id) {
+    console.error('ID korisnika nije pronađen!');
+    return;
   }
+
+  // 1. Izvuci trenutni token iz AuthService-a
+  const currentUser = this.authService.getLoggedUser();
+  const token = currentUser?.token;
+
+  if (!token) {
+    console.error('Token nije pronađen, korisnik verovatno nije ulogovan kako treba.');
+    return;
+  }
+
+  // 2. Pozivamo update (ovde token prosleđujemo ako tvoj dataService to zahteva)
+  this.dataService.updateUser(this.user.id, this.tempUser).subscribe({
+    next: (res) => {
+      // 3. Kada čuvaš izmene u AuthService, OBAVEZNO prosledi i token nazad 
+      // da ne bi ostao bez njega u memoriji (snapshotu)
+      this.user = { ...this.tempUser, id: this.user.id };
+      this.authService.setCurrentUser(this.user, token); 
+
+      this.isEditMode = false;
+      console.log('Profil je uspešno ažuriran');
+    },
+    error: (err) => {
+      console.error('Greška pri upisu u bazu:', err);
+    },
+  });
+}
 }

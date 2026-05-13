@@ -6,6 +6,14 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http';
 
+// 1. Uvezi Firebase funkciju i tvoj environment
+import { initializeApp } from 'firebase/app';
+import { environment } from './environments/environment';
+
+// 2. Inicijalizuj Firebase pre bootstrap-ovanja aplikacije
+// Ovo omogućava Authentication servisu da koristi tvoj Web API Key
+initializeApp(environment.firebase);
+
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -13,4 +21,4 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(),
   ],
-});
+});   
