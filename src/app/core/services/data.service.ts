@@ -89,7 +89,9 @@ export class DataService {
   }
 
   getUserByUsername(username: string): Observable<User | null> {
-    const token = this.authService.getLoggedUser()?.token;
+    const token =
+      this.authService.getLoggedUser()?.token ||
+      localStorage.getItem('temp_token');
 
     // 1. Počinjemo sa osnovnim URL-om i prvim obaveznim parametrom (koristimo ?)
     let url = `${this.baseUrl}users.json?orderBy="username"&equalTo="${username}"`;
