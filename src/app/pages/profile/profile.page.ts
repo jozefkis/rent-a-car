@@ -74,7 +74,7 @@ export class ProfilePage implements OnInit {
       closeOutline,
       documentText,
       documentTextOutline,
-      documentTextSharp
+      documentTextSharp,
     });
   }
 
@@ -82,14 +82,14 @@ export class ProfilePage implements OnInit {
     this.authService.currentUser$.subscribe((data) => {
       if (data) {
         this.user = data;
-        this.tempUser = { ...data }; 
+        this.tempUser = { ...data };
       }
     });
   }
 
   toggleEdit() {
     this.isEditMode = true;
-    this.tempUser = { ...this.user }; 
+    this.tempUser = { ...this.user };
   }
 
   cancelEdit() {
@@ -97,35 +97,40 @@ export class ProfilePage implements OnInit {
     this.tempUser = { ...this.user };
   }
 
-  async saveChanges() {
-  if (!this.user.id) {
-    console.error('ID korisnika nije pronađen!');
-    return;
+  saveChanges() {
+    if (!this.user.id) return;
+
+    const currentUser = this.authService.getLoggedUser();
+    const token = currentUser?.token;
+    if (!token) return;
+
+    // 1. Prvo REST API poziv za Auth (Email/PW)
+    this.authService
+      .updateCredentials(this.tempUser.username, this.tempUser.password)
+      .subscribe({
+        next: (authRes) => {
+          // 2. Ako je Auth prošao, onda ide update u Realtime Database
+          this.dataService.updateUser(this.user.id, this.tempUser).subscribe({
+            next: (res) => {
+              // Važno: Novi token treba da se sačuva jer se stari menja pri promeni email-a/pw-a
+              this.user = { ...this.tempUser, id: this.user.id };
+              this.authService.setCurrentUser(
+                this.user,
+                authRes.idToken || token,
+              );
+
+              this.isEditMode = false;
+              console.log('Profil i Auth uspešno ažurirani preko REST API-ja');
+            },
+            error: (err) => console.error('Baza nije ažurirana:', err),
+          });
+        },
+        error: (err) => {
+          console.error('REST API Auth greška:', err);
+          if (err.error?.error?.message === 'CREDENTIAL_TOO_OLD_LOGIN_AGAIN') {
+            alert('Morate se ponovo ulogovati da biste promenili ove podatke.');
+          }
+        },
+      });
   }
-
-  // 1. Izvuci trenutni token iz AuthService-a
-  const currentUser = this.authService.getLoggedUser();
-  const token = currentUser?.token;
-
-  if (!token) {
-    console.error('Token nije pronađen, korisnik verovatno nije ulogovan kako treba.');
-    return;
-  }
-
-  // 2. Pozivamo update (ovde token prosleđujemo ako tvoj dataService to zahteva)
-  this.dataService.updateUser(this.user.id, this.tempUser).subscribe({
-    next: (res) => {
-      // 3. Kada čuvaš izmene u AuthService, OBAVEZNO prosledi i token nazad 
-      // da ne bi ostao bez njega u memoriji (snapshotu)
-      this.user = { ...this.tempUser, id: this.user.id };
-      this.authService.setCurrentUser(this.user, token); 
-
-      this.isEditMode = false;
-      console.log('Profil je uspešno ažuriran');
-    },
-    error: (err) => {
-      console.error('Greška pri upisu u bazu:', err);
-    },
-  });
-}
 }
