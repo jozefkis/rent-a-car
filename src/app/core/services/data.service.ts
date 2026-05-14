@@ -159,7 +159,6 @@ export class DataService {
     return this.http.get(url);
   }
 
-  // --- POMOĆNA METODA ---
   private transformFirebaseData(res: any): any[] {
     const output = [];
     for (const key in res) {

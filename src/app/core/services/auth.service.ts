@@ -124,10 +124,10 @@ export class AuthService {
 
   updateCredentials(newUsername: string, newPw: string): Observable<any> {
     const currentUser = this.getLoggedUser();
-    // DODAJ CONSOLE LOG DA VIDIŠ ŠTA STVARNO ŠALJEŠ
+
     console.log('Trenutni korisnik iz memorije:', currentUser);
 
-    const idToken = currentUser?.token; // Proveri da li se tvoj ključ u User modelu zove 'token' ili 'idToken'
+    const idToken = currentUser?.token; 
 
     if (!idToken) {
       throw new Error('Nema validnog tokena! Korisnik mora biti ulogovan.');

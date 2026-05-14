@@ -112,7 +112,6 @@ export class ProfilePage implements OnInit {
           // 2. Ako je Auth prošao, onda ide update u Realtime Database
           this.dataService.updateUser(this.user.id, this.tempUser).subscribe({
             next: (res) => {
-              // Važno: Novi token treba da se sačuva jer se stari menja pri promeni email-a/pw-a
               this.user = { ...this.tempUser, id: this.user.id };
               this.authService.setCurrentUser(
                 this.user,

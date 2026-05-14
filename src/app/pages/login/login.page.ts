@@ -88,13 +88,9 @@ export class LoginPage implements OnInit {
         this.authService.logIn(virtualEmail, this.password),
       );
 
-      /* KLJUČNA PROMENA: 
-       Moramo ODMAH da sačuvamo token u AuthService.
-       Čim ovo uradimo, DataService.getTokenQuery() će početi da vraća ispravan ?auth=...
-    */
       this.authService.setTokenOnly(authRes.idToken);
 
-      // 2. SADA POVLAČIMO PODATKE IZ BAZE (jer sada imamo token u memoriji)
+      // 2. SADA POVLAČIMO PODATKE IZ BAZE
       const user = await firstValueFrom(
         this.dataService.getUserByUsername(this.username),
       );
