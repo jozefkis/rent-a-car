@@ -25,20 +25,15 @@ interface UserData {
   providedIn: 'root',
 })
 export class AuthService {
-  // 1. BehaviorSubject čuva trenutno stanje korisnika.
-  // Inicijalno pokušava da pročita 'loggedUser' iz localStorage-a.
   private currentUserSubject = new BehaviorSubject<User | null>(
     JSON.parse(localStorage.getItem('loggedUser') || 'null'),
   );
 
-  // 2. Observable koji komponente mogu da "slušaju" (npr. za prikaz imena u meniju)
   public currentUser$ = this.currentUserSubject.asObservable();
   private tempToken: string | null = null;
 
   setTokenOnly(token: string) {
     this.tempToken = token;
-    // Opciono: ako tvoj getLoggedUser() vuče podatke iz LocalStorage-a,
-    // privremeno snimi token tamo da bi DataService mogao da ga dohvati.
     localStorage.setItem('temp_token', token);
   }
 
@@ -52,7 +47,7 @@ export class AuthService {
    */
   // setCurrentUser(user: User): void {
   //   localStorage.setItem('loggedUser', JSON.stringify(user));
-  //   // Emitujemo novu vrednost svim pretplatnicima
+  //   
   //   this.currentUserSubject.next(user);
   // }
   // U auth.service.ts
@@ -62,9 +57,7 @@ export class AuthService {
     this.currentUserSubject.next(userData);
   }
 
-  /**
-   * Vraća trenutnu vrednost korisnika (snapshot)
-   */
+  
   getLoggedUser(): User | null {
     // 1. Prvo gledamo da li imamo korisnika u memoriji (Subject)
     if (this.currentUserSubject.value) {
@@ -83,9 +76,7 @@ export class AuthService {
     return null;
   }
 
-  /**
-   * Sinhrona provera da li je korisnik ulogovan
-   */
+  
   isLoggedIn(): boolean {
     return this.currentUserSubject.value !== null;
   }
@@ -117,10 +108,6 @@ export class AuthService {
       { email: username, password: password, returnSecureToken: true },
     );
   }
-
-  /**
-   * Kompletna odjava: čišćenje memorije, storage-a i preusmeravanje
-   */
 
   updateCredentials(newUsername: string, newPw: string): Observable<any> {
     const currentUser = this.getLoggedUser();
